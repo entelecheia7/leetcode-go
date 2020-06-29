@@ -9,9 +9,10 @@ import (
 // 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 // https://leetcode-cn.com/problems/trapping-rain-water/
 func main() {
-	nums := []int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1} //6
+	// nums := []int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1} //6
 	// nums := []int{4, 2, 3} // 1
-	fmt.Println(trap(nums))
+	nums := []int{2, 1, 0, 2} // 3
+	fmt.Println(trap2(nums))
 }
 
 // 法一：按列求。
@@ -51,6 +52,7 @@ func trap(height []int) int {
 // 当maxRight小于maxLeft时，从右侧计算
 // 从左计算，mexLeft是准确的。对于一个列来说，如果它的maxLeft < height[n-1]，那么它的maxLeft和maxRight的最小值一定在左侧
 // 从右计算，maxRight是准确的。对于一个列来说，如果它的maxRight < height[0]，那么它的maxLeft和maxRight的最小值一定在右侧
+// 时间O(n)，空间O(1)
 func trap2(height []int) int {
 	n := len(height)
 	if n < 3 {
@@ -78,6 +80,35 @@ func trap2(height []int) int {
 		}
 	}
 
+	return capacity
+}
+
+// 法三：利用栈
+// 遍历高度小于栈顶高度时，说明有积水，入栈
+// 遍历高度大于栈顶高度时，出栈计算
+// 使用这个方法是逐层计算雨水容量的
+// O(n)
+func trap3(height []int) int {
+	n := len(height)
+	if n < 3 {
+		return 0
+	}
+	stack := []int{0}
+	capacity := 0
+	for i := 1; i < n; i++ {
+		for len(stack) != 0 && height[stack[len(stack)-1]] < height[i] { // 找到一个右侧的墙height[i]
+			bottom := stack[len(stack)-1] // 容器底高
+			stack = stack[:len(stack)-1]
+			for len(stack) != 0 && height[stack[len(stack)-1]] == height[bottom] {
+				stack = stack[:len(stack)-1]
+			}
+			if len(stack) > 0 { // 如果找到一个左侧的墙
+				left := stack[len(stack)-1]
+				capacity += (getMin(height[i], height[left]) - height[bottom]) * (i - left - 1) // height*width
+			}
+		}
+		stack = append(stack, i)
+	}
 	return capacity
 }
 
