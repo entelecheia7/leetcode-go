@@ -16,26 +16,20 @@ func main() {
 	fmt.Println(isValid("()"))
 }
 
-// 使用栈，遇到左括号入栈，遇到右括号弹出匹配
+// 法一：暴力匹配。一旦匹配到一对括号，就进行消除。最后看这个字符串是否为空。O(n²)
+
+// 法二：使用栈，遇到左括号，将右括号入栈，遇到右括号弹出匹配。O(n)
 func isValid(s string) bool {
-	m := map[byte]byte{
-		')': '(',
-		']': '[',
-		'}': '{',
-	}
-	n := len(s)
-	if n == 0 {
-		return true
-	} else if n%2 == 1 {
-		return false
-	}
 	stack := []byte{}
-	for i := 0; i < n; i++ {
-		switch s[i] {
-		case '(', '[', '{':
-			stack = append(stack, s[i])
-		default:
-			if len(stack) == 0 || stack[len(stack)-1] != m[s[i]] {
+	for i := 0; i < len(s); i++ {
+		if s[i] == '(' {
+			stack = append(stack, ')')
+		} else if s[i] == '[' {
+			stack = append(stack, ']')
+		} else if s[i] == '{' {
+			stack = append(stack, '}')
+		} else {
+			if len(stack) == 0 || stack[len(stack)-1] != s[i] {
 				return false
 			}
 			stack = stack[:len(stack)-1]
