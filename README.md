@@ -5,9 +5,9 @@
 * [listNode](#listNode)
 * [tree](#tree)
 * [datastructure](#datastructure)
+* [recursion](#recursion)
 * [dynamic_programming](#dynamic-programming)
 * [math](#math)
-* [recursion](#recursion)
 
 ## array
 1. 两数之和
@@ -27,6 +27,7 @@
 125. 验证回文串
 242. 有效的字母异位词
 299. 猜数字游戏
+1021. 删除最外层的括号
 
 ## listNode
 21. 合并两个有序链表
@@ -41,13 +42,13 @@
 ## datastructure
 155. 最小栈
 
+## recursion
+46. 全排列
+47. 全排列 II
+77. 组合
+
 ## dynamic_programming
 70. 爬楼梯
 
 ## math
 67. 二进制求和
-
-## recursion
-46. 全排列
-47. 全排列 II
-77. 组合
