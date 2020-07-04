@@ -11,6 +11,7 @@ import (
 // 你可以假设字符串只包含小写字母。
 // 进阶:
 // 如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？
+// 49. 字母异位词分组
 // https://leetcode-cn.com/problems/valid-anagram/
 func main() {
 	fmt.Println(isAnagram("anagram", "nagaram"))

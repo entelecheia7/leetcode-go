@@ -39,11 +39,10 @@ func inorderTraversal(root *TreeNode) []int {
 }
 
 // 法二：循环
-func inorderTraversal2(root *TreeNode) []int {
+func inorderTraversal2(root *TreeNode) (result []int) {
 	if root == nil {
 		return nil
 	}
-	result := []int{}
 	cur := root
 	stack := []*TreeNode{}
 	for cur != nil || len(stack) != 0 {
@@ -61,11 +60,10 @@ func inorderTraversal2(root *TreeNode) []int {
 }
 
 // 法三：莫里斯遍历。改变树的形态，将节点以中序遍历的顺序变化成只有右子节点的二叉树
-func inorderTraversal3(root *TreeNode) []int {
+func inorderTraversal3(root *TreeNode) (result []int) {
 	if root == nil {
 		return nil
 	}
-	result := []int{}
 	cur := root
 	var pre *TreeNode
 	for cur != nil {
@@ -102,14 +100,13 @@ type colorNode struct {
 
 // 法四：颜色遍历，二叉树遍历通用
 // 定义两种颜色，白色为首次访问，灰色为第二次，灰色节点可以直接输出
-func inorderTraversal4(root *TreeNode) []int {
+func inorderTraversal4(root *TreeNode) (result []int) {
 	if root == nil {
 		return nil
 	}
 
 	white, gray := 0, 1
 	stack := []colorNode{{root, white}}
-	result := []int{}
 	for len(stack) != 0 {
 		cur := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]

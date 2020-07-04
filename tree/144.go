@@ -27,13 +27,11 @@ type TreeNode struct {
 }
 
 // 法一：利用栈，双百
-func preorderTraversal(root *TreeNode) []int {
+func preorderTraversal(root *TreeNode) (result []int) {
 	if root == nil {
 		return nil
 	}
-
 	stack := []*TreeNode{root}
-	result := []int{}
 	for len(stack) != 0 {
 		node := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
@@ -58,4 +56,33 @@ func preorderTraversal2(root *TreeNode) []int {
 	result = append(result, preorderTraversal(root.Left)...)
 	result = append(result, preorderTraversal(root.Right)...)
 	return result
+}
+
+type colorNode struct {
+	node  *TreeNode
+	color int
+}
+
+// 法三：颜色遍历
+func preorderTraversal3(root *TreeNode) (result []int) {
+	if root == nil {
+		return nil
+	}
+	white, gray := 0, 1
+	stack := []colorNode{{root, white}}
+	for len(stack) > 0 {
+		back := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if back.node != nil {
+			if back.color == white {
+				stack = append(stack, colorNode{back.node.Right, white})
+				stack = append(stack, colorNode{back.node.Left, white})
+				back.color = gray
+				stack = append(stack, back)
+			} else {
+				result = append(result, back.node.Val)
+			}
+		}
+	}
+	return
 }

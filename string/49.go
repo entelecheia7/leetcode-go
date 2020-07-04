@@ -57,9 +57,9 @@ func groupAnagrams2(strs []string) [][]string {
 	if len(strs) == 0 {
 		return nil
 	}
-	m := make(map[[26]byte][]string)
+	m := make(map[[26]int][]string)
 	for _, str := range strs {
-		var count [26]byte
+		var count [26]int
 		for i := 0; i < len(str); i++ {
 			count[str[i]-'a']++
 		}
