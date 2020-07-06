@@ -7,6 +7,7 @@
 * [datastructure](#datastructure)
 * [recursion](#recursion)
 * [dynamic_programming](#dynamic-programming)
+* [backtracing](#backtracing)
 * [math](#math)
 
 ## array
@@ -57,6 +58,9 @@
 
 ## dynamic_programming
 70. 爬楼梯
+
+## backtracing
+22. 括号生成
 
 ## math
 67. 二进制求和
