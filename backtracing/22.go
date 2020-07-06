@@ -13,6 +13,7 @@ func main() {
 // 法一：生成全排列，再检查生成字符串是否合法，复杂度较高
 
 // 法二：回溯
+// 优化思路：将字符串拼接部分进行优化，选用 []byte 或 []uint8 进行字符串生成
 func generateParenthesis(n int) (result []string) {
 	if n <= 0 {
 		return nil
@@ -36,6 +37,8 @@ func generateParenthesisHelper(cur string, result *[]string, left, right int) {
 // 法三：动态规划
 // n对括号从n-1对变化而来
 // dp[i] = "(" + dp[j] + ")" + dp[i- j - 1] , j = 0, 1, ..., i - 1
+// 如：dp[2] = {"("+dp[0]+")"+dp[1], "("+dp[1]+")"+dp[0]}
+//     dp[3] = {"("+dp[0]+")"+dp[2], "("+dp[1]+")"+dp[1], "("+dp[2]+")"+dp[0]}
 // 根据leetcode的测试用例，空间复杂度略低于法二
 func generateParenthesis3(n int) []string {
 	if n <= 0 {

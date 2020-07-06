@@ -12,11 +12,15 @@ import (
 // https://leetcode-cn.com/problems/4sum/
 func main() {
 	// fmt.Print(fourSum([]int{1, 0, -1, 0, -2, 2}, 0))
-	fmt.Print(fourSum([]int{-1, -5, -5, -3, 2, 5, 0, 4}, -7))
+	// fmt.Println(fourSum([]int{-1, -5, -5, -3, 2, 5, 0, 4}, -7))
+	fmt.Println(fourSum2([]int{-1, -5, -5, -3, 2, 5, 0, 4}, -7))
+
 }
 
+// 暴力法略过，复杂度很高
+
 // 法一：排序，固定两个数+双指针
-// 比起三数之和增加了剪枝的步骤
+// 比起三数之和增加了剪枝的步骤，剪枝的方法比较巧妙
 func fourSum(nums []int, target int) (result [][]int) {
 	n := len(nums)
 	if n < 4 {
@@ -68,4 +72,41 @@ func fourSum(nums []int, target int) (result [][]int) {
 	return
 }
 
-// 法二：暴力。复杂度很高
+// 法二：回溯。可用于N-Sum问题。
+func fourSum2(nums []int, target int) (result [][]int) {
+	sort.Ints(nums)
+	getNSum(nums, target, 4, []int{}, &result)
+	return result
+}
+func getNSum(nums []int, target, n int, cur []int, result *[][]int) {
+	if len(nums) < n || nums[0]*n > target || nums[len(nums)-1]*n < target {
+		return
+	}
+	if n == 2 {
+		left, right := 0, len(nums)-1
+		for left < right {
+			sum := nums[left] + nums[right]
+			if sum == target {
+				*result = append(*result, append(cur, []int{nums[left], nums[right]}...))
+				left++
+				right--
+				for left < right && nums[left] == nums[left-1] {
+					left++
+				}
+				for left < right && nums[right] == nums[right+1] {
+					right--
+				}
+			} else if sum < target {
+				left++
+			} else {
+				right--
+			}
+		}
+	} else {
+		for i := 0; i < len(nums)-n+1; i++ {
+			if i == 0 || (i > 0 && nums[i] != nums[i-1]) {
+				getNSum(nums[i+1:], target-nums[i], n-1, append(cur, nums[i]), result)
+			}
+		}
+	}
+}
