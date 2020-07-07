@@ -53,6 +53,7 @@
 ## datastructure
 155. 最小栈
 剑指 Offer 09. 用两个栈实现队列
+641. 设计循环双端队列
 
 ## recursion
 46. 全排列
