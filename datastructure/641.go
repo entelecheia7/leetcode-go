@@ -48,122 +48,171 @@ func main() {
 }
 
 // 法一：链表实现
+// type MyCircularDeque struct {
+// 	// head和tail保留一个哨兵节点
+// 	head, tail *TwoWayListNode
+// 	length     int
+// 	capacity   int
+// }
+// type TwoWayListNode struct {
+// 	Val        int
+// 	Next, Prev *TwoWayListNode
+// }
+
+// /** Initialize your data structure here. Set the size of the deque to be k. */
+// func Constructor(k int) MyCircularDeque {
+// 	head := &TwoWayListNode{}
+// 	tail := &TwoWayListNode{}
+// 	head.Next = tail
+// 	tail.Prev = head
+// 	return MyCircularDeque{
+// 		head:     head,
+// 		tail:     tail,
+// 		length:   0,
+// 		capacity: k,
+// 	}
+// }
+
+// /** Adds an item at the front of Deque. Return true if the operation is successful. */
+// func (this *MyCircularDeque) InsertFront(value int) bool {
+// 	if this.IsFull() {
+// 		return false
+// 	}
+// 	node := this.newNode(value)
+// 	node.Next = this.head.Next
+// 	node.Next.Prev = node
+// 	node.Prev = this.head
+// 	this.head.Next = node
+
+// 	this.length++
+// 	return true
+// }
+
+// /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+// func (this *MyCircularDeque) InsertLast(value int) bool {
+// 	if this.IsFull() {
+// 		return false
+// 	}
+// 	node := this.newNode(value)
+// 	node.Prev = this.tail.Prev
+// 	this.tail.Prev.Next = node
+// 	node.Next = this.tail
+// 	this.tail.Prev = node
+
+// 	this.length++
+// 	return true
+// }
+
+// /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+// func (this *MyCircularDeque) DeleteFront() bool {
+// 	if this.IsEmpty() {
+// 		return false
+// 	}
+// 	tmp := this.head.Next.Next
+// 	this.head.Next.Prev = nil
+// 	this.head.Next.Next = nil
+// 	this.head.Next = tmp
+// 	tmp.Prev = this.head
+
+// 	this.length--
+// 	return true
+// }
+
+// /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+// func (this *MyCircularDeque) DeleteLast() bool {
+// 	if this.IsEmpty() {
+// 		return false
+// 	}
+// 	tmp := this.tail.Prev.Prev
+// 	this.tail.Prev.Prev = nil
+// 	this.tail.Prev.Next = nil
+// 	this.tail.Prev = tmp
+// 	tmp.Next = this.tail
+
+// 	this.length--
+// 	return true
+// }
+
+// /** Get the front item from the deque. */
+// func (this *MyCircularDeque) GetFront() int {
+// 	if this.IsEmpty() {
+// 		return -1
+// 	}
+// 	return this.head.Next.Val
+// }
+
+// /** Get the last item from the deque. */
+// func (this *MyCircularDeque) GetRear() int {
+// 	if this.IsEmpty() {
+// 		return -1
+// 	}
+// 	return this.tail.Prev.Val
+// }
+
+// /** Checks whether the circular deque is empty or not. */
+// func (this *MyCircularDeque) IsEmpty() bool {
+// 	if this.length == 0 && this.capacity != 0 {
+// 		return true
+// 	}
+// 	return false
+// }
+
+// /** Checks whether the circular deque is full or not. */
+// func (this *MyCircularDeque) IsFull() bool {
+// 	if this.length == this.capacity || this.capacity == 0 {
+// 		return true
+// 	}
+// 	return false
+// }
+// func (this *MyCircularDeque) newNode(val int) *TwoWayListNode {
+// 	return &TwoWayListNode{Val: val}
+// }
+
+// 法二：数组实现
 type MyCircularDeque struct {
-	// head和tail保留一个哨兵节点
-	head, tail *TwoWayListNode
-	length     int
-	capacity   int
-}
-type TwoWayListNode struct {
-	Val        int
-	Next, Prev *TwoWayListNode
 }
 
 /** Initialize your data structure here. Set the size of the deque to be k. */
 func Constructor(k int) MyCircularDeque {
-	head := &TwoWayListNode{}
-	tail := &TwoWayListNode{}
-	head.Next = tail
-	tail.Prev = head
-	return MyCircularDeque{
-		head:     head,
-		tail:     tail,
-		length:   0,
-		capacity: k,
-	}
+
 }
 
 /** Adds an item at the front of Deque. Return true if the operation is successful. */
 func (this *MyCircularDeque) InsertFront(value int) bool {
-	if this.IsFull() {
-		return false
-	}
-	node := this.newNode(value)
-	node.Next = this.head.Next
-	node.Next.Prev = node
-	node.Prev = this.head
-	this.head.Next = node
 
-	this.length++
-	return true
 }
 
 /** Adds an item at the rear of Deque. Return true if the operation is successful. */
 func (this *MyCircularDeque) InsertLast(value int) bool {
-	if this.IsFull() {
-		return false
-	}
-	node := this.newNode(value)
-	node.Prev = this.tail.Prev
-	this.tail.Prev.Next = node
-	node.Next = this.tail
-	this.tail.Prev = node
 
-	this.length++
-	return true
 }
 
 /** Deletes an item from the front of Deque. Return true if the operation is successful. */
 func (this *MyCircularDeque) DeleteFront() bool {
-	if this.IsEmpty() {
-		return false
-	}
-	tmp := this.head.Next.Next
-	this.head.Next.Prev = nil
-	this.head.Next.Next = nil
-	this.head.Next = tmp
-	tmp.Prev = this.head
 
-	this.length--
-	return true
 }
 
 /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
 func (this *MyCircularDeque) DeleteLast() bool {
-	if this.IsEmpty() {
-		return false
-	}
-	tmp := this.tail.Prev.Prev
-	this.tail.Prev.Prev = nil
-	this.tail.Prev.Next = nil
-	this.tail.Prev = tmp
-	tmp.Next = this.tail
 
-	this.length--
-	return true
 }
 
 /** Get the front item from the deque. */
 func (this *MyCircularDeque) GetFront() int {
-	if this.IsEmpty() {
-		return -1
-	}
-	return this.head.Next.Val
+
 }
 
 /** Get the last item from the deque. */
 func (this *MyCircularDeque) GetRear() int {
-	if this.IsEmpty() {
-		return -1
-	}
-	return this.tail.Prev.Val
+
 }
 
 /** Checks whether the circular deque is empty or not. */
 func (this *MyCircularDeque) IsEmpty() bool {
-	if this.length == 0 && this.capacity != 0 {
-		return true
-	}
-	return false
+
 }
 
 /** Checks whether the circular deque is full or not. */
 func (this *MyCircularDeque) IsFull() bool {
-	if this.length == this.capacity || this.capacity == 0 {
-		return true
-	}
-	return false
-}
-func (this *MyCircularDeque) newNode(val int) *TwoWayListNode {
-	return &TwoWayListNode{Val: val}
+
 }

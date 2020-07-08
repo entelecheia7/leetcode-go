@@ -48,6 +48,7 @@ func (h *maxIntHeap) Push(x interface{}) { (*h) = append(*h, x.(int)) }
 func (h *maxIntHeap) Pop() interface{}   { min := (*h)[len(*h)-1]; (*h) = (*h)[:len(*h)-1]; return min }
 
 // 法三：利用快排思想进行递归分区，时间O(n)
+// arr[k-1]是期待的分区中点
 func getLeastNumbers3(arr []int, k int) []int {
 	if len(arr) < k {
 		return arr
