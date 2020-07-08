@@ -13,6 +13,7 @@ func main() {
 	fmt.Println(twoSum(nums, 9))
 }
 
+// 使用一个map记录遍历过的值和target的差值
 func twoSum(nums []int, target int) []int {
 	n := len(nums)
 	if n == 0 {
@@ -28,3 +29,5 @@ func twoSum(nums []int, target int) []int {
 
 	return nil
 }
+
+// 如果是升序数组可以使用双指针
