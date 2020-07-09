@@ -15,24 +15,17 @@ func main() {
 
 // 法一：回溯，逐个生成长度为1、2、3……len(nums)的子集
 func subsets(nums []int) (result [][]int) {
-	if len(nums) == 0 {
-		return nil
-	}
-	result = append(result, []int{})
-	for i := 0; i < len(nums); i++ {
-		subsetBTHelper(nums, 0, []int{}, i+1, &result)
-	}
+	subsetBTHelper(nums, 0, []int{}, &result)
 
 	return result
 }
-func subsetBTHelper(nums []int, from int, cur []int, length int, result *[][]int) {
-	if len(cur) == length {
-		tmp := make([]int, length)
-		copy(tmp, cur)
-		*result = append(*result, tmp)
-	}
+func subsetBTHelper(nums []int, from int, cur []int, result *[][]int) {
+	tmp := make([]int, len(cur))
+	copy(tmp, cur)
+	*result = append(*result, tmp)
+
 	for i := from; i < len(nums); i++ {
-		subsetBTHelper(nums, i+1, append(cur, nums[i]), length, result)
+		subsetBTHelper(nums, i+1, append(cur, nums[i]), result)
 	}
 }
 

@@ -69,6 +69,8 @@
 
 ## backtracing
 22. 括号生成
+51. N皇后
+78. 子集
 
 ## math
 50. Pow(x, n)
