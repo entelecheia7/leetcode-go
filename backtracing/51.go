@@ -18,24 +18,32 @@ func main() {
 
 // 回溯
 func solveNQueens(n int) (result [][]string) {
-	if n <= 0 {
-		return nil
+	// 生成空棋盘
+	board := make([]string, n)
+	for i := 0; i < n; i++ {
+		board[i] = strings.Repeat(".", n)
 	}
-	nQueensHelper(n, 0, []string{}, &result)
+
+	nQueensHelper(n, 0, board, &result)
 	return result
 }
 
 // row代表放置的行，范围：0~n-1
-func nQueensHelper(n, row int, cur []string, result *[][]string) {
+func nQueensHelper(n, row int, board []string, result *[][]string) {
 	if row == n {
 		tmp := make([]string, n)
-		copy(tmp, cur)
+		copy(tmp, board)
 		*result = append(*result, tmp)
 		return
 	}
 	for column := 0; column < n; column++ {
-		if checkNQueen(n, row, column, cur) {
-			nQueensHelper(n, row+1, append(cur, strings.Repeat(".", column)+"Q"+strings.Repeat(".", n-1-column)), result)
+		if checkNQueen(n, row, column, board) {
+			initRow := board[row]
+			rowStr := []byte(board[row])
+			rowStr[column] = 'Q'
+			board[row] = string(rowStr)
+			nQueensHelper(n, row+1, board, result)
+			board[row] = initRow
 		}
 	}
 

@@ -12,42 +12,35 @@ func main() {
 	fmt.Println(permute(nums))
 }
 
-func permute(nums []int) [][]int {
-	result := [][]int{}
-	cur := []int{}
-	helper(nums, cur, &result)
+func permute(nums []int) (result [][]int) {
+	used := make([]int, len(nums))
+	cur := make([]int, len(nums))
+	helper(nums, used, cur, 0, &result)
 	return result
 }
 
-func helper(nums []int, cur []int, result *[][]int) {
-	curN := len(cur)
-	n := len(nums)
+// index代表本次函数中cur需要填充的位置
+func helper(nums []int, used []int, cur []int, index int, result *[][]int) {
 	// 结束本次排列
-	if curN == n {
-		tmp := make([]int, n)
+	if index == len(nums) {
+		tmp := make([]int, index)
 		copy(tmp, cur)
 		*result = append(*result, tmp)
 		return
 	}
 
-	for i := 0; i < n; i++ {
+	for i := 0; i < len(nums); i++ {
 		// 排除已经使用的元素
-		f := false
-		for _, j := range cur {
-			if nums[i] == j {
-				f = true
-				break
-			}
-		}
-		if f {
+		if used[i] == 1 {
 			continue
 		}
 		// 添加一个元素
-		cur = append(cur, nums[i])
+		cur[index] = nums[i]
+		used[i] = 1
 		// 进入下一层
-		helper(nums, cur, result)
+		helper(nums, used, cur, index+1, result)
 		// 撤销选择
-		cur = cur[:curN]
+		used[i] = 0
 	}
 
 }
