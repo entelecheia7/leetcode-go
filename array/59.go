@@ -52,3 +52,33 @@ func generateMatrix(n int) (result [][]int) {
 
 	return result
 }
+
+// 法二：归纳法
+func generateMatrix2(n int) (result [][]int) {
+	result = make([][]int, n)
+	for k := range result {
+		result[k] = make([]int, n)
+	}
+	max := n * n
+	num := 1
+	i, j := 0, 0
+	di, dj := 0, 1 // result[i][j]距下一个点的距离
+	for num <= max {
+		result[i][j] = num
+		nexti, nextj := (i+di)%n, (j+dj)%n
+		if nextj < 0 { // handle bottom=>top index out of range
+			nextj += n
+		}
+		// left=>right di:0,dj:1
+		// top => bottom di:1,dj:0
+		// right=>left di:0,dj:-1
+		// bottom=>top di:-1,dj:0
+		if result[nexti][nextj] > 0 { // 说明本行或本列已经处理完毕
+			di, dj = dj, -di
+		}
+		i += di
+		j += dj
+		num++
+	}
+	return result
+}
