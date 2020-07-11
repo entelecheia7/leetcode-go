@@ -5,7 +5,6 @@
 * [listNode](#listNode)
 * [tree](#tree)
 * [datastructure](#datastructure)
-* [recursion](#recursion)
 * [dynamic_programming](#dynamic-programming)
 * [backtracing](#backtracing)
 * [math](#math)
@@ -18,8 +17,10 @@
 26. 删除排序数组中的重复项
 31. 下一个排列
 42. 接雨水
+47. 全排列 II
 59. 螺旋矩阵 II
 66. 加一
+77. 组合
 84. 柱状图中最大的矩形
 88. 合并两个有序数组
 189. 旋转数组
@@ -46,10 +47,13 @@
 
 ## tree
 94. 二叉树的中序遍历
+105. 从前序与中序遍历序列构造二叉树
+106. 从中序与后序遍历序列构造二叉树
 108. 将有序数组转换为二叉搜索树
 112. 路径总和
 144. 二叉树的前序遍历
 145. 二叉树的后序遍历
+236. 二叉树的最近公共祖先
 266. 翻转二叉树
 429. N叉树的层序遍历
 589. N叉树的前序遍历
@@ -60,10 +64,6 @@
 155. 最小栈
 剑指 Offer 09. 用两个栈实现队列
 641. 设计循环双端队列
-
-## recursion
-47. 全排列 II
-77. 组合
 
 ## dynamic_programming
 70. 爬楼梯
