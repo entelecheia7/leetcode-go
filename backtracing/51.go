@@ -23,13 +23,12 @@ func solveNQueens(n int) (result [][]string) {
 	for i := 0; i < n; i++ {
 		board[i] = strings.Repeat(".", n)
 	}
-
-	nQueensHelper(n, 0, board, &result)
+	nQueensHelper(n, board, 0, &result)
 	return result
 }
 
 // row代表放置的行，范围：0~n-1
-func nQueensHelper(n, row int, board []string, result *[][]string) {
+func nQueensHelper(n int, board []string, row int, result *[][]string) {
 	if row == n {
 		tmp := make([]string, n)
 		copy(tmp, board)
@@ -38,15 +37,14 @@ func nQueensHelper(n, row int, board []string, result *[][]string) {
 	}
 	for column := 0; column < n; column++ {
 		if checkNQueen(n, row, column, board) {
-			initRow := board[row]
+			origRow := board[row]
 			rowStr := []byte(board[row])
 			rowStr[column] = 'Q'
 			board[row] = string(rowStr)
-			nQueensHelper(n, row+1, board, result)
-			board[row] = initRow
+			nQueensHelper(n, board, row+1, result)
+			board[row] = origRow
 		}
 	}
-
 }
 
 // row和column代表新皇后想要放置的行和列

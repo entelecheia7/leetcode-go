@@ -22,13 +22,11 @@ func main() {
 	fmt.Println(combine(4, 2)) // best
 	fmt.Println(combine2(4, 2))
 }
-func combine(n int, k int) [][]int {
+func combine(n int, k int) (result [][]int) {
 	if n < 1 || k < 1 || n < k {
 		return nil
 	}
 	cur := make([]int, k, k)
-	result := [][]int{}
-
 	helper1(cur, 0, 1, n, k, &result)
 
 	return result

@@ -21,25 +21,23 @@ func main() {
 
 // 法一：通过排序 和 i > 0 && nums[i] == nums[i-1] && used[i-1] 来判断重复数字
 // 使用used记录记录使用过的元素，key是元素在nums中的下标
-func permuteUnique1(nums []int) [][]int {
+func permuteUnique1(nums []int) (result [][]int) {
 	if len(nums) == 0 {
 		return nil
 	}
-	result := [][]int{}
 	n := len(nums)
-	cur := []int{}
-	used := make(map[int]bool, n)
+	cur := make([]int, n)
+	used := make([]bool, n)
 	sort.Ints(nums)
 
-	helper1(nums, cur, used, &result)
+	helper1(nums, cur, 0, used, &result)
 
 	return result
 }
-func helper1(nums []int, cur []int, used map[int]bool, result *[][]int) {
-	curN := len(cur)
+func helper1(nums []int, cur []int, curIndex int, used []bool, result *[][]int) {
 	n := len(nums)
 	// 结束本次排列
-	if curN == n {
+	if curIndex == n {
 		tmp := make([]int, n)
 		copy(tmp, cur)
 		*result = append(*result, tmp)
@@ -55,23 +53,22 @@ func helper1(nums []int, cur []int, used map[int]bool, result *[][]int) {
 		if i > 0 && nums[i] == nums[i-1] && !used[i-1] {
 			continue
 		}
-		//
-		cur = append(cur, nums[i])
+		// 处理当前层
+		cur[curIndex] = nums[i]
 		used[i] = true
-		//
-		helper1(nums, cur, used, result)
-		//
-		cur = cur[:curN]
+		// 进入下一层
+		helper1(nums, cur, curIndex+1, used, result)
+		// 撤销选择
 		used[i] = false
 	}
 }
 
-// 空间最优
-func permuteUnique2(nums []int) [][]int {
+// 法二：空间最优
+// 通过在原数组内交换元素来获得新的排列
+func permuteUnique2(nums []int) (result [][]int) {
 	if len(nums) == 0 {
 		return nil
 	}
-	result := [][]int{}
 	sort.Ints(nums)
 	helper2(nums, 0, &result)
 
@@ -87,6 +84,7 @@ func helper2(nums []int, i int, result *[][]int) {
 		*result = append(*result, tmp)
 		return
 	}
+	// nums[i]和其他不同元素交换位置
 	// nums[0:i]是已经决定的部分，nums[i:]是待决定部分，同时待选元素也都在nums[i:]
 	for k := i; k < n; k++ {
 		// 跳过重复数字
