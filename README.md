@@ -7,6 +7,7 @@
 * [datastructure](#datastructure)
 * [dynamic_programming](#dynamic-programming)
 * [backtracing](#backtracing)
+* [greedy](#greedy)
 * [math](#math)
 
 ## array
@@ -24,6 +25,7 @@
 88. 合并两个有序数组
 169. 多数元素
 189. 旋转数组
+215. 数组中的第K个最大元素
 239. 滑动窗口最大值
 283. 移动零
 347. 前 K 个高频元素
@@ -75,6 +77,9 @@
 47. 全排列 II
 51. N皇后
 78. 子集
+
+## greedy
+455. 分发饼干
 
 ## math
 50. Pow(x, n)
