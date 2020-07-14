@@ -11,12 +11,12 @@ import (
 func main() {
 	fmt.Println(subsets([]int{1, 2, 3}))
 	fmt.Println(subsets2([]int{1, 2, 3}))
+	fmt.Println(subsets3([]int{1, 2, 3}))
 }
 
-// 法一：回溯，逐个生成长度为1、2、3……len(nums)的子集
+// 法一：回溯，每个元素不断与它之后的元素组合，形成子集
 func subsets(nums []int) (result [][]int) {
 	subsetBTHelper(nums, 0, []int{}, &result)
-
 	return result
 }
 func subsetBTHelper(nums []int, from int, cur []int, result *[][]int) {
@@ -47,5 +47,21 @@ func subsets2(nums []int) (result [][]int) {
 		result = append(result, tmp)
 	}
 
+	return result
+}
+
+// 法三：循环，遍历nums时，在结果集的基础上添加元素形成新的子集
+func subsets3(nums []int) (result [][]int) {
+	if len(nums) == 0 {
+		return nil
+	}
+	result = append(result, []int{})
+	for i := 0; i < len(nums); i++ {
+		tmp := make([][]int, 0, len(result))
+		for _, r := range result {
+			tmp = append(tmp, append(r, nums[i]))
+		}
+		result = append(result, tmp...)
+	}
 	return result
 }

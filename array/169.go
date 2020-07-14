@@ -11,6 +11,7 @@ import (
 // https://leetcode-cn.com/problems/majority-element/description/
 func main() {
 	fmt.Println(majorityElement([]int{3, 2, 3}))
+	fmt.Println(majorityElement3([]int{3, 2, 3}))
 	fmt.Println(majorityElement4([]int{3, 2, 3}))
 }
 
@@ -38,6 +39,34 @@ func majorityElement2(nums []int) int {
 // 法三：分治
 // 如果 n 是 nums 的众数，那么将 nums 分为两部分，n一定是至少一部分的众数
 // 时间复杂度O(nlogn)，空间复杂度O(logn)
+func majorityElement3(nums []int) int {
+	return majorityElementDivideHelper(nums, 0, len(nums)-1)
+}
+func majorityElementDivideHelper(nums []int, left, right int) int {
+	if left == right {
+		return nums[left]
+	}
+	mid := left + ((right - left) >> 1)
+	majorityLeft := majorityElementDivideHelper(nums, left, mid)
+	majorityRight := majorityElementDivideHelper(nums, mid+1, right)
+	if left == right {
+		return left
+	}
+	leftCount := majorityCountHelper(nums, left, mid, majorityLeft)
+	rightCount := majorityCountHelper(nums, mid+1, right, majorityRight)
+	if leftCount > rightCount {
+		return majorityLeft
+	}
+	return majorityRight
+}
+func majorityCountHelper(nums []int, left, right, target int) (count int) {
+	for i := left; i <= right; i++ {
+		if nums[i] == target {
+			count++
+		}
+	}
+	return count
+}
 
 // 法四：Boyer-Moore 投票算法
 // 我们维护一个候选众数 candidate 和它出现的次数 count。初始时 candidate 可以为任意值，count 为 0；
