@@ -42,6 +42,7 @@ func getMax(a, b int) int {
 }
 
 // 法二：迭代
+// 时间O(n),空间O(n)
 type MyNode struct {
 	*TreeNode
 	level int

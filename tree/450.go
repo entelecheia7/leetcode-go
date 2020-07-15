@@ -60,21 +60,23 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 		root.Right = deleteNode(root.Right, key)
 	} else if key < root.Val {
 		root.Left = deleteNode(root.Left, key)
-	} else {
-		if root.Left == nil && root.Right == nil {
-			root = nil
-		} else if root.Left != nil { // 有两侧子树或只有左子树
-			root.Val = getReplaceNodeFromLeft(root).Val
+	} else { // root 是待删除节点
+		if root.Left == nil {
+			return root.Right
+		} else if root.Right == nil {
+			return root.Left
+		} else {
+			// root 拥有两个子节点
+			root.Val := getReplaceNodeFromLeft(root).Val
 			root.Left = deleteNode(root.Left, root.Val)
-		} else { // 只有右子树
-			root.Val = getReplaceNodeFromRight(root).Val
-			root.Right = deleteNode(root.Right, root.Val)
 		}
 	}
 	return root
 }
 
 // 替代节点可以是左子树的最右节点或者右子树的最左节点
+// 这里使用的是左子树的最右节点
+// 返回替代节点
 func getReplaceNodeFromLeft(root *TreeNode) (node *TreeNode) {
 	node = root.Left
 	for node.Right != nil {
@@ -82,10 +84,28 @@ func getReplaceNodeFromLeft(root *TreeNode) (node *TreeNode) {
 	}
 	return node
 }
-func getReplaceNodeFromRight(root *TreeNode) (node *TreeNode) {
-	node = root.Right
-	for node.Left != nil {
-		node = node.Left
+// 法二：删除节点部分的另一种写法
+func deleteNode2(root *TreeNode, key int) *TreeNode {
+	if root == nil {
+		return nil
 	}
-	return node
+	if key > root.Val {
+		root.Right = deleteNode(root.Right, key)
+	} else if key < root.Val {
+		root.Left = deleteNode(root.Left, key)
+	} else { // root 是待删除节点
+		if root.Left == nil && root.Right == nil {
+			root = nil
+		} else if root.Left == nil {
+			return root.Right
+		} else if root.Right == nil {
+			return root.Left
+		} else {
+			// root 拥有两个子节点
+			replaceNode := getReplaceNodeFromLeft(root)
+			replaceNode.Right = root.Right
+			return root.Left
+		}
+	}
+	return root
 }
