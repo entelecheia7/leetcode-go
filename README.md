@@ -8,6 +8,7 @@
 * [dynamic_programming](#dynamic-programming)
 * [backtracing](#backtracing)
 * [greedy](#greedy)
+* [search(BFS&DFS)](#search)
 * [math](#math)
 
 ## array
@@ -64,6 +65,7 @@
 266. 翻转二叉树
 429. N叉树的层序遍历
 450. 删除二叉搜索树中的节点
+515. 在每个树行中找最大值
 589. N叉树的前序遍历
 590. N叉树的后序遍历
 700. 二叉搜索树中的搜索
@@ -76,6 +78,7 @@
 
 ## dynamic_programming
 70. 爬楼梯
+120. 三角形最小路径和
 
 ## backtracing
 17. 电话号码的字母组合
@@ -89,6 +92,9 @@
 55. 跳跃游戏
 455. 分发饼干
 860. 柠檬水找零
+
+## search
+433. 最小基因变化
 
 ## math
 50. Pow(x, n)
