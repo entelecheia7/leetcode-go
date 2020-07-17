@@ -51,6 +51,7 @@ func maxProfit(prices []int) (profit int) {
 
 // 对前一个方法进行优化，只遍历一次
 // 优化的关键在于：低点-高点相当于一段递增的线段，那么我们只需要计算相邻的递增价格的收益
+// best
 func maxProfitOptimization(prices []int) (profit int) {
 	n := len(prices)
 	if n == 1 {
