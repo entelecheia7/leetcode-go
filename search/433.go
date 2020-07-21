@@ -56,7 +56,7 @@ func minMutationDFSHelper(start, end string, material []string, bankMap map[stri
 		for _, m := range material {
 			if start[i:i+1] != m {
 				next := start[:i] + m + start[i+1:]
-				if _, exist := bankMap[next]; exist && !visited[next] {
+				if bankMap[next] && !visited[next] {
 					visited[next] = true
 					minMutationDFSHelper(next, end, material, bankMap, changeNum+1, visited, minMu)
 					visited[next] = false

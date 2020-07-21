@@ -1,7 +1,7 @@
 package main
 
 import (
-// "fmt"
+	"fmt"
 )
 
 // 874. 模拟行走机器人
@@ -21,82 +21,51 @@ import (
 //     答案保证小于 2 ^ 31
 // https://leetcode-cn.com/problems/walking-robot-simulation/
 func main() {
-	// fmt.Println(robotSim([]int{4, -1, 3}, nil)) //25
-	// fmt.Println(robotSim([]int{4, -1, 4, -2, 4},
-	// [][]int{
-	// 	{2, 4},
-	// })) //65
+	fmt.Println(robotSim([]int{4, -1, 3}, nil)) //25
+	fmt.Println(robotSim([]int{4, -1, 4, -2, 4},
+		[][]int{
+			{2, 4},
+		})) //65
 }
 
-// func robotSim(commands []int, obstacles [][]int) (area int) {
-// 	n := len(commands)
-// 	if n == 0 {
-// 		return 0
-// 	}
-// 	xy := [2]int{0, 0}
-// 	obstaclesX := make(map[int][]int) // 以x轴为key统计障碍物
-// 	obstaclesY := make(map[int][]int) // 以y轴为key统计障碍物
-// 	for _, v := range obstacles {
-// 		obstaclesX[v[0]] = append(obstaclesX[v[0]], v[1])
-// 		obstaclesY[v[1]] = append(obstaclesY[v[1]], v[0])
-// 	}
+func robotSim(commands []int, obstacles [][]int) (area int) {
+	n := len(commands)
+	if n == 0 {
+		return 0
+	}
+	x, y := 0, 0
+	obstaclesMap := make(map[[2]int]bool) // 将障碍物转换为map，加速查找
+	for _, v := range obstacles {
+		obstaclesMap[[2]int{v[0], v[1]}] = true
+	}
+	// 0北 1东 2南 3西
+	direction := 0
+	directionX := [4]int{0, 1, 0, -1} // 朝向对应的x坐标变化
+	directionY := [4]int{1, 0, -1, 0} // 朝向对应的y坐标变化
 
-// 	towards := 1 // 1北 2东 3南 4西
-// 	for i := 0; i < n; i++ {
-// 		if commands[i] < 0 {
-// 			towards = turn(towards, commands[i])
-// 		} else {
-// 			switch towards {
-// 			case 1:
-// 				d := getDist(obstaclesX[xy[0]], xy[1], commands[i])
-// 				xy[1] += d
-// 			case 2:
-// 				d := getDist(obstaclesY[xy[1]], xy[0], commands[i])
-// 				xy[0] += d
-// 			case 3:
-// 				xy[1] -= d
-// 			case 4:
-// 				xy[0] -= d
-// 			}
-// 		}
-// 		// 更新面积
-// 		area = getMax(area, xy[0]*xy[0]+xy[1]*xy[1])
-// 	}
-// 	return area
-// }
-// func getDist(obstacles []int, start, distance int) (dist int) {
-// 	if start > end {
-// 		start, end = end, start
-// 	}
-// 	for i := 1; i <= dist; i++ {
-// 		for _, o := range obstacles {
-// 			if o == start+i {
-// 				return i - start - 1
-// 			}
-// 		}
-// 	}
-// 	return distance
-// }
+	for i := 0; i < n; i++ {
+		if commands[i] == -2 {
+			direction = (direction + 3) % 4
+		} else if commands[i] == -1 {
+			direction = (direction + 1) % 4
+		} else {
+			for j := 0; j < commands[i]; j++ {
+				tmpX, tmpY := x+directionX[direction], y+directionY[direction]
+				if _, exist := obstaclesMap[[2]int{tmpX, tmpY}]; exist {
+					break
+				}
+				x, y = tmpX, tmpY
+				// 更新面积
+				area = getMax(area, x*x+y*y)
+			}
+		}
+	}
+	return area
+}
 
-// // 1北 2东 3南 4西
-// func turn(towards, diff int) int {
-// 	if diff == -2 {
-// 		towards--
-// 		if towards == 0 {
-// 			towards = 4
-// 		}
-// 	} else if diff == -1 {
-// 		towards++
-// 		if towards == 5 {
-// 			towards = 1
-// 		}
-// 	}
-// 	return towards
-// }
-
-// func getMax(a, b int) int {
-// 	if a > b {
-// 		return a
-// 	}
-// 	return b
-// }
+func getMax(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}

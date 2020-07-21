@@ -8,6 +8,7 @@ import "fmt"
 func main() {
 	fmt.Println(generateParenthesis(3))
 	fmt.Println(generateParenthesis3(3)) // best
+	fmt.Println(generateParenthesis4(3)) // best
 }
 
 // 法一：生成全排列，再检查生成字符串是否合法，复杂度较高
@@ -38,14 +39,14 @@ func generateParenthesisHelper(cur string, result *[]string, left, right int) {
 // n对括号从n-1对变化而来
 // dp[i] = "(" + dp[j] + ")" + dp[i- j - 1] , j = 0, 1, ..., i - 1
 // 如：dp[2] = {
-// 	   "("+dp[0]+")"+dp[1], 
+// 	   "("+dp[0]+")"+dp[1],
 // 	   "("+dp[1]+")"+dp[0]
 // }
 //     dp[3] = {
-// 	   "("+dp[0]+")"+dp[2], 
-// 	   "("+dp[1]+")"+dp[1], 
+// 	   "("+dp[0]+")"+dp[2],
+// 	   "("+dp[1]+")"+dp[1],
 // 	   "("+dp[2]+")"+dp[0]
-}
+// }
 // 空间复杂度略低于法二
 func generateParenthesis3(n int) []string {
 	if n <= 0 {
@@ -67,4 +68,34 @@ func generateParenthesis3(n int) []string {
 		state[i] = cur
 	}
 	return state[n]
+}
+
+// 法四：广度优先搜索
+// 空间复杂度O(n^2)
+func generateParenthesis4(n int) (result []string) {
+	if n <= 0 {
+		return nil
+	}
+	queue := []generator{{"(", n - 1, n}}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		if cur.left == 0 && cur.right == 0 {
+			result = append(result, cur.cur)
+			continue
+		}
+		if cur.left > 0 {
+			queue = append(queue, generator{cur.cur + "(", cur.left - 1, cur.right})
+		}
+		if cur.right > cur.left {
+			queue = append(queue, generator{cur.cur + ")", cur.left, cur.right - 1})
+		}
+	}
+
+	return result
+}
+
+type generator struct {
+	cur         string
+	left, right int
 }

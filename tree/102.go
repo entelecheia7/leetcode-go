@@ -24,7 +24,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// 法一：使用一个队列，best
+// 法一：BFS，使用一个队列，best
 func levelOrder(root *TreeNode) (result [][]int) {
 	if root == nil {
 		return nil
