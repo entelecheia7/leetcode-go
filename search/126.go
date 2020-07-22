@@ -23,12 +23,12 @@ func main() {
 	// ]
 	// fmt.Println(findLadders2("hit", "cog", []string{"hot", "dot", "dog", "lot", "log", "cog"}))
 
-	// fmt.Println(findLadders("a", "c", []string{"a", "b", "c"}))
+	// fmt.Println(findLadders2("a", "c", []string{"a", "b", "c"}))
 
 	// [["red","ted","tad","tax"],["red","ted","tex","tax"],["red","rex","tex","tax"]]
 	fmt.Println(findLadders2("red", "tax", []string{"ted", "tex", "red", "tax", "tad", "den", "rex", "pee"}))
 
-	// fmt.Println(findLadders("qa", "sq", []string{"si", "go", "se", "cm", "so", "ph", "mt", "db", "mb", "sb", "kr", "ln", "tm", "le", "av", "sm", "ar", "ci", "ca", "br", "ti", "ba", "to", "ra", "fa", "yo", "ow", "sn", "ya", "cr", "po", "fe", "ho", "ma", "re", "or", "rn", "au", "ur", "rh", "sr", "tc", "lt", "lo", "as", "fr", "nb", "yb", "if", "pb", "ge", "th", "pm", "rb", "sh", "co", "ga", "li", "ha", "hz", "no", "bi", "di", "hi", "qa", "pi", "os", "uh", "wm", "an", "me", "mo", "na", "la", "st", "er", "sc", "ne", "mn", "mi", "am", "ex", "pt", "io", "be", "fm", "ta", "tb", "ni", "mr", "pa", "he", "lr", "sq", "ye"}))
+	// fmt.Println(findLadders2("qa", "sq", []string{"si", "go", "se", "cm", "so", "ph", "mt", "db", "mb", "sb", "kr", "ln", "tm", "le", "av", "sm", "ar", "ci", "ca", "br", "ti", "ba", "to", "ra", "fa", "yo", "ow", "sn", "ya", "cr", "po", "fe", "ho", "ma", "re", "or", "rn", "au", "ur", "rh", "sr", "tc", "lt", "lo", "as", "fr", "nb", "yb", "if", "pb", "ge", "th", "pm", "rb", "sh", "co", "ga", "li", "ha", "hz", "no", "bi", "di", "hi", "qa", "pi", "os", "uh", "wm", "an", "me", "mo", "na", "la", "st", "er", "sc", "ne", "mn", "mi", "am", "ex", "pt", "io", "be", "fm", "ta", "tb", "ni", "mr", "pa", "he", "lr", "sq", "ye"}))
 }
 
 // 法一：单向BFS
@@ -114,6 +114,7 @@ func checkConvertion(start, end string, n int) bool {
 }
 
 // 法二：双向BFS
+// best
 func findLadders2(beginWord string, endWord string, wordList []string) (result [][]string) {
 	if len(wordList) == 0 {
 		return nil
@@ -173,28 +174,25 @@ func findLadders2(beginWord string, endWord string, wordList []string) (result [
 		}
 		queue = newqueue
 	}
-	fmt.Println(path)
+
 	// DFS，从beginWord开始组装结果
 	cur := []string{beginWord}
-
-	var dfs func([]string)
-	dfs = func(words []string) {
-		next := path[beginWord]
-		if len(next) > 0 {
-			for _, n := range next {
-				cur = append(cur, n)
-				if n == endWord {
-					tmp := make([]string, len(cur))
-					copy(tmp, cur)
-					result = append(result, tmp)
-				} else {
-					dfs(path[n])
-				}
-				cur = cur[:len(cur)-1]
+	var generator func([]string)
+	generator = func(words []string) {
+		for _, n := range words {
+			cur = append(cur, n)
+			if n == endWord {
+				tmp := make([]string, len(cur))
+				copy(tmp, cur)
+				result = append(result, tmp)
+			} else {
+				generator(path[n])
 			}
+			cur = cur[:len(cur)-1]
 		}
+
 	}
-	dfs(path[beginWord])
+	generator(path[beginWord])
 
 	return result
 }
