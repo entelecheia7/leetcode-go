@@ -13,14 +13,15 @@ import (
 // https://leetcode-cn.com/problems/coin-change/
 func main() {
 	// fmt.Println(coinChange([]int{1, 2, 5}, 11)) // 3
-	fmt.Println(coinChange([]int{2, 5, 17}, 40)) // 5
-	fmt.Println(coinChange([]int{1, 7, 10}, 14)) // 2
+	fmt.Println(coinChange([]int{2, 5, 17}, 40))  // 5
+	fmt.Println(coinChange2([]int{1, 7, 10}, 14)) // 2
 }
 
 // 法一：贪心+回溯
 // 注意，这道题不能只使用贪心算法，因为局部最优不一定能形成一个合理的组合
 // 大硬币的数量过多导致无法形成组合，就减少硬币数量再尝试
-// 同时，贪心优先找出的不一定是最优解
+// 同时，贪心优先找出的不一定是最优解，所以一定要遍历完所有情况
+// best
 func coinChange(coins []int, amount int) (count int) {
 	if amount < 0 {
 		return -1
@@ -62,5 +63,26 @@ func getMin(a, b int) int {
 }
 
 // 法二：动态规划
+// 状态转移方程：f(n) = f(n-币值)+1
 func coinChange2(coins []int, amount int) (count int) {
+	if amount < 0 {
+		return -1
+	}
+	if len(coins) == 0 && amount == 0 {
+		return 0
+	}
+	dp := make([]int, amount+1)
+	dp[0] = 0
+	for i := 1; i <= amount; i++ {
+		dp[i] = amount + 1
+		for _, coin := range coins {
+			if i >= coin && dp[i-coin] != math.MaxInt64 {
+				dp[i] = getMin(dp[i], dp[i-coin]+1)
+			}
+		}
+	}
+	if dp[amount] > amount {
+		return -1
+	}
+	return dp[amount]
 }
