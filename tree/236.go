@@ -72,6 +72,8 @@ func lowestCommonAncestor2(root, p, q *TreeNode) *TreeNode {
 	}
 	return nil
 }
+
+// key是节点的值，value是它的父节点
 func getParentNode(root *TreeNode, parent *map[int]*TreeNode) {
 	if root == nil {
 		return

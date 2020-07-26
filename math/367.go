@@ -16,47 +16,33 @@ func main() {
 // 可以转换为求平方根问题
 // 法一：二分法
 func isPerfectSquare(num int) bool {
-	if num == 0 || num == 1 {
+	if num == 1 {
 		return true
 	}
-	left, right := 2, num
+	left, right := 1, num
 	for left <= right {
 		mid := left + ((right - left) >> 1)
-		product := mid * mid
-		if product == num {
-			return true
-		} else if product < num {
-			if (mid+1)*(mid+1) > num {
-				return false
-			}
+		if mid*mid <= num {
 			left = mid + 1
 		} else {
 			right = mid - 1
 		}
 	}
-
-	return false
+	return r*r == num
 }
 
 // 法二：牛顿迭代法
 // 收敛的O(logn)，优于二分法，空间复杂度更低
 // best
 func isPerfectSquare2(num int) bool {
-	if num == 0 || num == 1 {
+	if num == 1 {
 		return true
 	}
-	x := num >> 1
-	for {
-		product := x * x
-		if product == num {
-			return true
-		} else if product < num && (x+1)*(x+1) > num {
-			return false
-		}
-		x = (x + num/x) >> 1
+	y := num >> 1
+	for y*y > num {
+		y = (y + num/y) >> 1
 	}
-
-	return false
+	return y*y == num
 }
 
 // 此外还有袖珍计算器算法和位运算，参考 69. x 的平方根

@@ -29,7 +29,8 @@ func main() {
 }
 
 // 从右侧开始，将大数和它左侧的小数交换位置，即可获得一个更大的数
-// 为了满足增幅小的要求：大数和小数要的位置都要尽可能靠右，交换后将大数位置右侧的数字升序排列
+// 为了满足增幅小的要求：大数和小数要的位置都要尽可能靠右
+// 交换后，需要将大数位置右侧的数字置为升序，因为原本是降序，所以直接反转就是升序
 // O(n)
 func nextPermutation(nums []int) {
 	n := len(nums)
@@ -44,7 +45,7 @@ func nextPermutation(nums []int) {
 		}
 	}
 	// 如果nums是降序序列，是没有比它更大的排列的，直接reverse整个数组
-	// 如果nums不是降序序列，在nums[min+1:]范围内找到：nums[min]<nums[k]，k是大数位置
+	// 如果nums不是降序序列，在nums[min+1:]范围内找到大数：nums[min]<nums[k]，大数的位置尽可能靠右
 	if min >= 0 {
 		k := n - 1
 		for nums[k] <= nums[min] {

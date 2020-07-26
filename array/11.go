@@ -18,10 +18,9 @@ func main() {
 
 // 法二：双指针
 // 双指针需要移动的是更短的一侧
-func maxArea(height []int) int {
-	max := 0
+func maxArea(height []int) (maxArea int) {
 	for left, right := 0, len(height)-1; left < right; {
-		max = getMax(max, getArea(height, right, left))
+		maxArea = getMax(maxArea, (right-left)*getMin(height[left], height[right]))
 		if height[left] > height[right] {
 			right--
 		} else {
@@ -29,11 +28,7 @@ func maxArea(height []int) int {
 		}
 	}
 
-	return max
-}
-
-func getArea(height []int, right, left int) int {
-	return (right - left) * getMin(height[left], height[right])
+	return maxArea
 }
 
 func getMax(a, b int) int {

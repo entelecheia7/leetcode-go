@@ -20,23 +20,14 @@ func canJump(nums []int) (result bool) {
 	n := len(nums)
 	if n == 0 {
 		return false
-	} else if n == 1 {
-		return true
 	}
-	furthest := nums[0]
-	for i := 0; i <= furthest; i++ {
-		furthest = getMax(furthest, i+nums[i])
-		if furthest >= n-1 {
-			return true
+	reachable := 0
+	for i := 0; i <= reachable && reachable < n; i++ {
+		if i+nums[i] > reachable {
+			reachable = i + nums[i]
 		}
 	}
-	return false
-}
-func getMax(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	return reachable >= n-1
 }
 
 // 法二：动态规划
