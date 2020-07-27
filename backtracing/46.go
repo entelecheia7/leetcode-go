@@ -13,34 +13,34 @@ func main() {
 }
 
 func permute(nums []int) (result [][]int) {
-	used := make([]int, len(nums))
-	cur := make([]int, len(nums))
-	helper(nums, used, cur, 0, &result)
+	n := len(nums)
+	used := make([]bool, n)
+	cur := make([]int, n)
+	permuteHelper(nums, n, used, cur, 0, &result)
 	return result
 }
 
 // index代表本次函数中cur需要填充的位置
-func helper(nums []int, used []int, cur []int, index int, result *[][]int) {
+func permuteHelper(nums []int, n int, used []bool, cur []int, index int, result *[][]int) {
 	// 结束本次排列
-	if index == len(nums) {
+	if index == n {
 		tmp := make([]int, index)
 		copy(tmp, cur)
 		*result = append(*result, tmp)
 		return
 	}
 
-	for i := 0; i < len(nums); i++ {
+	for i := 0; i < n; i++ {
 		// 排除已经使用的元素
-		if used[i] == 1 {
-			continue
+		if !used[i] {
+			// 添加一个元素
+			cur[index] = nums[i]
+			used[i] = true
+			// 进入下一层
+			permuteHelper(nums, n, used, cur, index+1, result)
+			// 撤销选择
+			used[i] = false
 		}
-		// 添加一个元素
-		cur[index] = nums[i]
-		used[i] = 1
-		// 进入下一层
-		helper(nums, used, cur, index+1, result)
-		// 撤销选择
-		used[i] = 0
 	}
 
 }
