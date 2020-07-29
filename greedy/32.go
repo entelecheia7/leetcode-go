@@ -6,11 +6,11 @@ import "fmt"
 // 给定一个只包含 '(' 和 ')' 的字符串，找出最长的包含有效括号的子串的长度。
 // https://leetcode-cn.com/problems/longest-valid-parentheses/
 func main() {
-	fmt.Println(longestValidParentheses3("(()"))      // 2
-	fmt.Println(longestValidParentheses3(")()())"))   // 4
-	fmt.Println(longestValidParentheses3("()(()"))    // 2
-	fmt.Println(longestValidParentheses3("(()(((()")) // 2
-	fmt.Println(longestValidParentheses3("()(())"))   // 6
+	fmt.Println(longestValidParentheses("(()"))      // 2
+	fmt.Println(longestValidParentheses(")()())"))   // 4
+	fmt.Println(longestValidParentheses("()(()"))    // 2
+	fmt.Println(longestValidParentheses("(()(((()")) // 2
+	fmt.Println(longestValidParentheses("()(())"))   // 6
 
 }
 
@@ -20,12 +20,13 @@ func main() {
 // 对左括号和右括号数量进行统计，当个数相等时，记录数目
 // 当右括号数量大于左括号时，重新开始一轮统计
 // 为了处理 (() 这种情况，再从右向左统计一遍
+// best
 func longestValidParentheses(s string) (maxLen int) {
-	if s == "" {
+	n := len(s)
+	if n <= 1 {
 		return 0
 	}
 	left, right := 0, 0
-	n := len(s)
 	for i := 0; i < n; i++ {
 		if s[i] == '(' {
 			left++
@@ -59,12 +60,13 @@ func longestValidParentheses(s string) (maxLen int) {
 // 法二：栈解法
 // 左括号直接入栈
 // 遇右括号弹出栈顶元素，计算长度；如果栈为空，将当前位置入栈
+// 栈顶要么是左括号，要么是最后一个没有被匹配的右括号的下标
 func longestValidParentheses2(s string) (maxLen int) {
-	if s == "" {
+	n := len(s)
+	if n <= 1 {
 		return 0
 	}
 	stack := []int{-1} // 为了计算方便括号的长度
-	n := len(s)
 	for i := 0; i < n; i++ {
 		if s[i] == '(' {
 			stack = append(stack, i)
@@ -85,20 +87,20 @@ func longestValidParentheses2(s string) (maxLen int) {
 // 如果s[i]为右括号，且s[i-1]为左括号，则dp[i] = dp[i-2]+2
 // 如果s[i]为右括号，且s[i-1]也为右括号，需要判断dp[i-1]的前一个位置是否为左括号
 func longestValidParentheses3(s string) (maxLen int) {
-	if s == "" {
+	n := len(s)
+	if n <= 1 {
 		return 0
 	}
-	n := len(s)
 	dp := make([]int, n)
 	for i := 1; i < n; i++ {
 		if s[i] == ')' {
-			if s[i-1] == '(' {
+			if s[i-1] == '(' { // 处理()()
 				if i >= 2 {
 					dp[i] = dp[i-2] + 2
 				} else {
 					dp[i] = 2
 				}
-			} else if s[i-1] == ')' {
+			} else if s[i-1] == ')' { // 处理(())、()(())
 				if i-dp[i-1] > 0 && s[i-dp[i-1]-1] == '(' {
 					if i-dp[i-1] >= 2 {
 						// 除了在dp[i-1]的基础上判断，还要考虑dp[i]这个序列之前是否有合法的序列
