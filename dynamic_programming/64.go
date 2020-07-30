@@ -7,7 +7,7 @@ import "fmt"
 // 说明：每次只能向下或者向右移动一步。
 // https://leetcode-cn.com/problems/minimum-path-sum/
 func main() {
-	fmt.Println(minPathSum2([][]int{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}})) //7
+	fmt.Println(minPathSum2([][]int{{1, 3, 1}, {1, 5, 1}, {4, 2, 1}})) // 7
 }
 
 // 法一：动态规划
@@ -48,6 +48,7 @@ func getMin(a, b int) int {
 }
 
 // 法二：动态规划空间复杂度优化
+// best
 func minPathSum2(grid [][]int) int {
 	if len(grid) == 0 || len(grid[0]) == 0 {
 		return 0

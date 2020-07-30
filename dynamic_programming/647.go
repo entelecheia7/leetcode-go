@@ -27,25 +27,17 @@ func countSubstrings(s string) (count int) {
 	for i := 0; i < n; i++ {
 		count++
 		// 回文串长度为奇数
-		left, right := i-1, i+1
-		for left >= 0 && right < n {
-			if s[left] != s[right] {
-				break
-			}
-			count++
-			left--
-			right++
-		}
+		count += extendSubString(s, n, i-1, i+1)
 		// 回文串长度为偶数，以s[i]为中点左侧字符
-		left, right = i, i+1
-		for left >= 0 && right < n {
-			if s[left] != s[right] {
-				break
-			}
-			count++
-			left--
-			right++
-		}
+		count += extendSubString(s, n, i, i+1)
+	}
+	return count
+}
+func extendSubString(s string, n, left, right int) (count int) {
+	for left >= 0 && right < n && s[left] == s[right] {
+		count++
+		left--
+		right++
 	}
 	return count
 }
