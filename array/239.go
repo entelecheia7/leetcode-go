@@ -70,6 +70,8 @@ func (h maxIntHeap) Peek() interface{} {
 
 // 法三： 双端队列。维护一个单调递减队列
 // 每个滑动窗口的元素下标都要入队，队的长度不会超过滑动窗口
+// 首先将前k个元素入队，队首为第一个滑动窗口的最大值
+// 遍历nums，每轮循环弹出滑动窗口外的元素、循环弹出队尾小于nums[i]的元素，将nums[i]入队，队首为当前滑动窗口的最大值
 // O(n+k)
 func maxSlidingWindow3(nums []int, k int) []int {
 	if k == 1 {
@@ -78,11 +80,11 @@ func maxSlidingWindow3(nums []int, k int) []int {
 	n := len(nums)
 	deque := []int{0}
 	result := make([]int, n-k+1)
-	for i := 1; i < n; i++ {
+	for i := 1; i < n; i++ { // i代表滑动窗口右边界
 		if len(deque) > 0 && deque[0] == i-k { // 剔除已经滑出窗口范围的数字
 			deque = deque[1:]
 		}
-		for len(deque) > 0 && nums[deque[len(deque)-1]] < nums[i] { // 将栈内小于新窗口元素的元素弹出
+		for len(deque) > 0 && nums[deque[len(deque)-1]] < nums[i] { // 将队列内内小于新窗口元素的元素弹出
 			deque = deque[:len(deque)-1]
 		}
 		deque = append(deque, i)
@@ -97,8 +99,8 @@ func maxSlidingWindow3(nums []int, k int) []int {
 // 法四：动态规划
 // 思路是将数组按照个数k分为几个组，最后一组可能不满足k个
 // 设滑动窗口的左右指针为i、j
-// left[j]表示从一个分组范围内从左侧边界向右的最大元素
-// right[i]表示从一个分组范围内从右侧边界向左的最大元素
+// maxLeft[j]表示从一个分组范围内从左侧边界到当前位置的最大元素
+// maxRight[i]表示从一个分组范围内从右侧边界当前位置的最大元素
 // 滑动窗口的最大值就是两个组范围的最大值
 // O(n)
 func maxSlidingWindow4(nums []int, k int) []int {
@@ -106,28 +108,28 @@ func maxSlidingWindow4(nums []int, k int) []int {
 		return nums
 	}
 	n := len(nums)
-	left := make([]int, n)
-	left[0] = nums[0]
-	right := make([]int, n)
-	right[n-1] = nums[n-1]
+	maxLeft := make([]int, n)
+	maxLeft[0] = nums[0]
+	maxRight := make([]int, n)
+	maxRight[n-1] = nums[n-1]
 	for i := 1; i < n; i++ {
 		if i%k == 0 { // 分组的左侧边界
-			left[i] = nums[i]
+			maxLeft[i] = nums[i]
 		} else {
-			left[i] = getMax(left[i-1], nums[i])
+			maxLeft[i] = getMax(maxLeft[i-1], nums[i])
 		}
-		// right数组要从右往左计算
+		// maxRight数组要从右往左计算
 		j := n - 1 - i
 		if (j+1)%k == 0 { // 分组的右侧边界
-			right[j] = nums[j]
+			maxRight[j] = nums[j]
 		} else {
-			right[j] = getMax(right[j+1], nums[j])
+			maxRight[j] = getMax(maxRight[j+1], nums[j])
 		}
 
 	}
 	result := make([]int, n-k+1)
 	for i := 0; i <= n-k; i++ {
-		result[i] = getMax(right[i], left[i+k-1])
+		result[i] = getMax(maxRight[i], maxLeft[i+k-1])
 	}
 	return result
 }
