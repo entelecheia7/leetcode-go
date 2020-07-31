@@ -10,6 +10,10 @@ import (
 // 返回滑动窗口中的最大值。
 // 进阶：
 // 你能在线性时间复杂度内解决此题吗？
+// 提示：
+//     1 <= nums.length <= 10^5
+//     -10^4 <= nums[i] <= 10^4
+//     1 <= k <= nums.length
 // https://leetcode-cn.com/problems/sliding-window-maximum
 func main() {
 	fmt.Println(maxSlidingWindow2([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
@@ -22,15 +26,15 @@ func main() {
 // 法一：暴力法，遍历每个滑动窗口。O(k*n)，略
 
 // 法二：使用堆
-// O(logn)
+// O(nlogk)
+// 创建一个大顶堆，先使用nums的前k个元素初始化
+// 堆顶为第一个滑动窗口的最大值
+// 循环 nums[k+1:]，当堆顶元素超出窗口范围时，将其弹出，并将其次超出窗口范围的元素逐个弹出，将当前循环到的元素入堆，得到当前窗口的最大值
 func maxSlidingWindow2(nums []int, k int) (result []int) {
-	n := len(nums)
-	if n == 0 || k == 0 {
-		return nil
-	}
 	if k == 1 {
 		return nums
 	}
+	n := len(nums)
 	var h maxIntHeap
 	h = make([][2]int, k)
 	for i := 0; i < k; i++ {
@@ -38,7 +42,7 @@ func maxSlidingWindow2(nums []int, k int) (result []int) {
 	}
 	heap.Init(&h)
 	result = append(result, h.Peek().([2]int)[0])
-	for i := 1; i <= n-k; i++ {
+	for i := 1; i <= n-k; i++ { // i代表窗口左边界，右边界为 i+k-1
 		for h.Peek() != nil && h.Peek().([2]int)[1] < i {
 			heap.Pop(&h)
 		}
@@ -54,7 +58,9 @@ func (h maxIntHeap) Len() int            { return len(h) }
 func (h maxIntHeap) Less(i, j int) bool  { return h[i][0] > h[j][0] }
 func (h maxIntHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
 func (h *maxIntHeap) Push(x interface{}) { (*h) = append(*h, x.([2]int)) }
-func (h *maxIntHeap) Pop() interface{}   { min := (*h)[len(*h)-1]; (*h) = (*h)[:len(*h)-1]; return min }
+
+// container/heap 已经将堆顶和末尾元素交换了位置，因此只需要弹出末尾元素
+func (h *maxIntHeap) Pop() interface{} { max := (*h)[len(*h)-1]; (*h) = (*h)[:len(*h)-1]; return max }
 func (h maxIntHeap) Peek() interface{} {
 	if h.Len() == 0 {
 		return nil
@@ -66,13 +72,10 @@ func (h maxIntHeap) Peek() interface{} {
 // 每个滑动窗口的元素下标都要入队，队的长度不会超过滑动窗口
 // O(n+k)
 func maxSlidingWindow3(nums []int, k int) []int {
-	n := len(nums)
-	if n == 0 || k == 0 {
-		return nil
-	}
 	if k == 1 {
 		return nums
 	}
+	n := len(nums)
 	deque := []int{0}
 	result := make([]int, n-k+1)
 	for i := 1; i < n; i++ {
@@ -99,13 +102,10 @@ func maxSlidingWindow3(nums []int, k int) []int {
 // 滑动窗口的最大值就是两个组范围的最大值
 // O(n)
 func maxSlidingWindow4(nums []int, k int) []int {
-	n := len(nums)
-	if n == 0 || k == 0 {
-		return nil
-	}
 	if k == 1 {
 		return nums
 	}
+	n := len(nums)
 	left := make([]int, n)
 	left[0] = nums[0]
 	right := make([]int, n)
