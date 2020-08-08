@@ -55,6 +55,8 @@ func getMax(a, b int) int {
 }
 
 // 法三：分治
+// 取一个中点，和最大的连续子数组要么在左侧，要么在右侧，要么穿过中间
+// 三者取最大者就是结果
 // O(nlogn)
 func maxSubArray3(nums []int) (max int) {
 	n := len(nums)

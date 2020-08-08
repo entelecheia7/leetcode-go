@@ -23,13 +23,13 @@ func main() {
 // 同时，贪心优先找出的不一定是最优解，所以一定要遍历完所有情况
 // best
 func coinChange(coins []int, amount int) (count int) {
-	if amount < 0 {
-		return -1
-	}
-	if len(coins) == 0 && amount == 0 {
+	if amount == 0 {
 		return 0
 	}
 	sort.Ints(coins)
+	if amount < 0 || len(coins) == 0 || amount < coins[0] {
+		return -1
+	}
 	count = math.MaxInt64
 	coinChangeBacktracingHelper(coins, amount, 0, &count)
 	if count == math.MaxInt64 {
@@ -65,11 +65,11 @@ func getMin(a, b int) int {
 // 法二：动态规划
 // 状态转移方程：f(n) = f(n-币值)+1
 func coinChange2(coins []int, amount int) (count int) {
-	if amount < 0 {
-		return -1
-	}
-	if len(coins) == 0 && amount == 0 {
+	if amount == 0 {
 		return 0
+	}
+	if amount < 0 || len(coins) == 0 {
+		return -1
 	}
 	dp := make([]int, amount+1)
 	dp[0] = 0

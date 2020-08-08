@@ -28,10 +28,10 @@ func minWindow(s string, t string) (result string) {
 	for i := 0; i < lt; i++ {
 		need[t[i]]++ // 记录需要的元素及数量
 	}
-	needTypeLen := 0 // 记录需要的不同元素的数量
+	needType := 0 // 记录需要的元素种类
 	for i := 0; i < 128; i++ {
 		if need[i] > 0 {
-			needTypeLen++
+			needType++
 		}
 	}
 	valid := 0
@@ -46,7 +46,7 @@ func minWindow(s string, t string) (result string) {
 			}
 		}
 		// 窗口包含所有所需元素时，进行记录，并移动左侧边界
-		for valid == needTypeLen {
+		for valid == needType {
 			// 计算长度
 			if result == "" || right-left < len(result) {
 				result = s[left:right]

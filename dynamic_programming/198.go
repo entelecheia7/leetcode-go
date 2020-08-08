@@ -16,10 +16,12 @@ func main() {
 
 // 法一：动态规划。
 // nums[i] 要么纳入统计，要么不纳入统计。
-// 计算两种情况，取较大值
-// f(2) = getMax(nums[1]+f(0), f(1))
-// f(3) = getMax(nums[2]+f(1), f(2))
-// 递推公式：f(n) = getMax(nums[n-1]+ f(n-2), f(n-1))
+// dp[i]变成二维，dp[i][1]表示偷nums[i]的最大值，dp[i][0]表示不偷nums[i]的最大值
+// 这时dp变成二维
+// 可以通过改变dp[i]的定义将问题简化，将dp[i]定义为含nums[i]的最大值，则：
+// dp[2] = getMax(nums[1]+dp[0], dp[1])
+// dp[3] = getMax(nums[2]+dp[1], dp[2])
+// 递推公式：dp[n] = getMax(nums[n-1]+ dp[n-2], dp[n-1])
 // 空间、时间O(n)
 func rob(nums []int) int {
 	n := len(nums)
@@ -47,8 +49,8 @@ func rob2(nums []int) (result int) {
 		return nums[0]
 	}
 	pp, p := 0, nums[0]
-	for i := 2; i <= n; i++ {
-		result = getMax(nums[i-1]+pp, p)
+	for i := 1; i < n; i++ {
+		result = getMax(nums[i]+pp, p)
 		pp, p = p, result
 	}
 	return result

@@ -39,49 +39,42 @@ func findWords(board [][]byte, words []string) (result []string) {
 	}
 	m, n := len(board), len(board[0])
 	trie := buildTrieTree(words)
-	used := make([][]bool, m)
-	for k := range used {
-		used[k] = make([]bool, n)
-	}
 	find := make(map[string]bool)
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
-			backTracing(board, used, []byte{}, i, j, m, n, trie, find)
+			if trie.next[board[i][j]-'a'] != nil {
+				backTracing(board, []byte{}, i, j, m, n, trie, find)
+			}
 		}
 	}
 	for k := range find {
 		result = append(result, k)
 	}
-
 	return
 }
 
-// 为了去重，结果使用一个map
-func backTracing(board [][]byte, used [][]bool, cur []byte, i, j, m, n int, trie *TrieNode, find map[string]bool) {
+var diff [4][2]int = [4][2]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
+
+// 为了去重，结果集使用一个map进行保存
+func backTracing(board [][]byte, cur []byte, i, j, m, n int, trie *TrieNode, find map[string]bool) {
+	if i < 0 || i == m || j < 0 || j == n || board[i][j] == '.' {
+		return
+	}
 	k := board[i][j] - 'a'
 	if trie.next[k] == nil {
 		return
 	}
 	cur = append(cur, board[i][j])
-	used[i][j] = true
+	tmp := board[i][j]
+	board[i][j] = '.'
 	if trie.next[k].isEnd {
 		find[string(cur)] = true
 	}
-
-	if i > 0 && !used[i-1][j] {
-		backTracing(board, used, cur, i-1, j, m, n, trie.next[k], find)
-	}
-	if i < m-1 && !used[i+1][j] {
-		backTracing(board, used, cur, i+1, j, m, n, trie.next[k], find)
-	}
-	if j > 0 && !used[i][j-1] {
-		backTracing(board, used, cur, i, j-1, m, n, trie.next[k], find)
-	}
-	if j < n-1 && !used[i][j+1] {
-		backTracing(board, used, cur, i, j+1, m, n, trie.next[k], find)
+	for _, v := range diff {
+		backTracing(board, cur, i+v[0], j+v[1], m, n, trie.next[k], find)
 	}
 	cur = cur[:len(cur)-1]
-	used[i][j] = false
+	board[i][j] = tmp
 }
 
 func buildTrieTree(words []string) *TrieNode {
