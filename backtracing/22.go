@@ -14,24 +14,28 @@ func main() {
 // 法一：生成全排列，再检查生成字符串是否合法，复杂度较高
 
 // 法二：回溯
-// 优化思路：将字符串拼接部分进行优化，选用 []byte 或 []uint8 进行字符串生成
+// 将字符串拼接部分进行优化，选用 []byte 或 []uint8 进行字符串生成
+// best
 func generateParenthesis(n int) (result []string) {
 	if n <= 0 {
 		return nil
 	}
-	generateParenthesisHelper("(", &result, n-1, n)
+	cur := make([]byte, n*2)
+	generateHelper(n, n, cur, 0, &result)
 	return result
 }
-func generateParenthesisHelper(cur string, result *[]string, left, right int) {
+func generateHelper(left, right int, cur []byte, i int, result *[]string) {
 	if left == 0 && right == 0 {
-		*result = append(*result, cur)
+		*result = append(*result, string(cur))
 		return
 	}
 	if left > 0 {
-		generateParenthesisHelper(cur+"(", result, left-1, right)
+		cur[i] = '('
+		generateHelper(left-1, right, cur, i+1, result)
 	}
 	if right > left {
-		generateParenthesisHelper(cur+")", result, left, right-1)
+		cur[i] = ')'
+		generateHelper(left, right-1, cur, i+1, result)
 	}
 }
 

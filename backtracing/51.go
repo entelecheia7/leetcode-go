@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 // 51. N皇后
@@ -19,36 +18,40 @@ func main() {
 // 回溯
 func solveNQueens(n int) (result [][]string) {
 	// 生成空棋盘
-	board := make([]string, n)
+	board := make([][]byte, n)
+	tpl := make([]byte, n)
 	for i := 0; i < n; i++ {
-		board[i] = strings.Repeat(".", n)
+		tpl[i] = '.'
+	}
+	for k := range board {
+		board[k] = make([]byte, n)
+		copy(board[k], tpl)
 	}
 	nQueensHelper(n, board, 0, &result)
 	return result
 }
 
 // row代表放置的行，范围：0~n-1
-func nQueensHelper(n int, board []string, row int, result *[][]string) {
+func nQueensHelper(n int, board [][]byte, row int, result *[][]string) {
 	if row == n {
 		tmp := make([]string, n)
-		copy(tmp, board)
+		for i, r := range board {
+			tmp[i] = string(r)
+		}
 		*result = append(*result, tmp)
 		return
 	}
 	for column := 0; column < n; column++ {
 		if checkNQueen(n, row, column, board) {
-			origRow := board[row]
-			rowStr := []byte(board[row])
-			rowStr[column] = 'Q'
-			board[row] = string(rowStr)
+			board[row][column] = 'Q'
 			nQueensHelper(n, board, row+1, result)
-			board[row] = origRow
+			board[row][column] = '.'
 		}
 	}
 }
 
 // row和column代表新皇后想要放置的行和列
-func checkNQueen(n, row, column int, cur []string) bool {
+func checkNQueen(n, row, column int, cur [][]byte) bool {
 	leftup, rightup := column-1, column+1
 	for i := row - 1; i >= 0; i-- { // i表示已放置皇后的行
 		if cur[i][column] == 'Q' { // 检查竖行
