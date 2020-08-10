@@ -61,9 +61,9 @@ func isValidSudoku2(board [][]byte) bool {
 				if isUsedNum(num, row[i]) || isUsedNum(num, squ[squNo]) || isUsedNum(num, column[j]) {
 					return false
 				}
-				row[i] = row[i] ^ (1 << num)
-				column[j] = column[j] ^ (1 << num)
-				squ[squNo] = squ[squNo] ^ (1 << num)
+				row[i] ^= 1 << num
+				column[j] ^= 1 << num
+				squ[squNo] ^= 1 << num
 			}
 		}
 	}
