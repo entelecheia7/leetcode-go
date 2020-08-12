@@ -17,10 +17,10 @@ import (
 //     假定起始基因序列与目标基因序列是不一样的。
 // 	https://leetcode-cn.com/problems/minimum-genetic-mutation/
 func main() {
-	fmt.Println(minMutation2("AACCGGTT", "AACCGGTA", []string{"AACCGGTA"}))                                     // 1
-	fmt.Println(minMutation2("AACCGGTT", "AAACGGTA", []string{"AACCGGTA", "AACCGCTA", "AAACGGTA"}))             // 2
-	fmt.Println(minMutation2("AAAAACCC", "AACCCCCC", []string{"AAAACCCC", "AAACCCCC", "AACCCCCC"}))             // 3
-	fmt.Println(minMutation2("AACCGGTT", "AAACGGTA", []string{"AACCGATT", "AACCGATA", "AAACGATA", "AAACGGTA"})) // 4
+	fmt.Println(minMutation3("AACCGGTT", "AACCGGTA", []string{"AACCGGTA"}))                                     // 1
+	fmt.Println(minMutation3("AACCGGTT", "AAACGGTA", []string{"AACCGGTA", "AACCGCTA", "AAACGGTA"}))             // 2
+	fmt.Println(minMutation3("AAAAACCC", "AACCCCCC", []string{"AAAACCCC", "AAACCCCC", "AACCCCCC"}))             // 3
+	fmt.Println(minMutation3("AACCGGTT", "AAACGGTA", []string{"AACCGATT", "AACCGATA", "AAACGATA", "AAACGGTA"})) // 4
 }
 
 // 思路：bank中存在的和start及中间结果只差1位的序列，就是下一步的可转换序列
@@ -109,6 +109,51 @@ func minMutation2(start string, end string, bank []string) (changeNum int) {
 		}
 		queue = queue[size:]
 		level++
+	}
+	return -1
+}
+
+// 法三：双向BFS
+func minMutation3(start string, end string, bank []string) (level int) {
+	bankMap := make(map[string]bool, len(bank))
+	for _, s := range bank {
+		bankMap[s] = true
+	}
+	if !bankMap[end] {
+		return -1
+	}
+	visitedBegin, visitedEnd := map[string]bool{start: true}, map[string]bool{end: true}
+	beginQ, endQ := []string{start}, []string{end}
+	material := []byte{'A', 'C', 'G', 'T'}
+
+	for len(beginQ) > 0 && len(endQ) > 0 {
+		if len(beginQ) > len(endQ) {
+			beginQ, endQ = endQ, beginQ
+			visitedBegin, visitedEnd = visitedEnd, visitedBegin
+		}
+		size := len(beginQ)
+		level++
+		for i := 0; i < size; i++ {
+			cur := []byte(beginQ[i])
+			for j := 0; j < 8; j++ {
+				old := cur[j]
+				for _, c := range material {
+					if c != old {
+						cur[j] = c
+						next := string(cur)
+						if bankMap[next] && !visitedBegin[next] {
+							if visitedEnd[next] {
+								return level
+							}
+							beginQ = append(beginQ, next)
+							visitedBegin[next] = true
+						}
+					}
+				}
+				cur[j] = old
+			}
+		}
+		beginQ = beginQ[size:]
 	}
 	return -1
 }
