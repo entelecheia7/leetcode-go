@@ -14,6 +14,7 @@ import (
 //     board[i][j] 是一个 [0, 1, 2, 3, 4, 5] 的排列.
 // https://leetcode-cn.com/problems/sliding-puzzle
 func main() {
+
 	fmt.Println(slidingPuzzle([][]int{
 		{1, 2, 3},
 		{5, 4, 0}})) //-1
