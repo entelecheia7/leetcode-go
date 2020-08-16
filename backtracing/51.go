@@ -15,7 +15,7 @@ func main() {
 	fmt.Println(solveNQueens(4))
 }
 
-// 回溯
+// 法一：常规回溯
 func solveNQueens(n int) (result [][]string) {
 	// 生成空棋盘
 	board := make([][]byte, n)
