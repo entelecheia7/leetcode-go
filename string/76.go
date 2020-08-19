@@ -35,33 +35,27 @@ func minWindow(s string, t string) (result string) {
 		}
 	}
 	valid := 0
-	left, right := 0, 0
-	for right < ls {
-		c := s[right]
-		right++
-		if need[c] > 0 {
-			window[c]++
-			if window[c] == need[c] {
+	left := 0
+	for i := 0; i < ls; i++ {
+		if need[s[i]] > 0 {
+			window[s[i]]++
+			if window[s[i]] == need[s[i]] {
 				valid++
 			}
 		}
 		// 窗口包含所有所需元素时，进行记录，并移动左侧边界
 		for valid == needType {
 			// 计算长度
-			if result == "" || right-left < len(result) {
-				result = s[left:right]
+			if result == "" || i+1-left < len(result) {
+				result = s[left : i+1]
 			}
 			// 滑动左侧边界
-			c = s[left]
-			if need[c] > 0 {
-				if need[c] == window[c] {
-					valid--
-				}
-				window[s[left]]--
+			window[s[left]]--
+			if window[s[left]] < need[s[left]] {
+				valid--
 			}
 			left++
 		}
 	}
-
 	return
 }
