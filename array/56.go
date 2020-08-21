@@ -25,7 +25,6 @@ func merge(intervals [][]int) (merged [][]int) {
 	for i < len(intervals) {
 		start := intervals[i][0]
 		end := intervals[i][1]
-		// fmt.Println("===", i, start, end)
 		for i < len(intervals)-1 && end >= intervals[i+1][0] {
 			i++
 			start = getMin(start, intervals[i][0])
