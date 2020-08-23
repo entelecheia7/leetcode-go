@@ -36,11 +36,5 @@ func reverseOnlyLetters(S string) string {
 }
 
 func isLetter(x byte) bool {
-	if x >= 'a' && x <= 'z' {
-		return true
-	} else if x >= 'A' && x <= 'Z' {
-		return true
-	}
-
-	return false
+	return (x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z')
 }

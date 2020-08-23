@@ -138,10 +138,8 @@ func reversePairsSub(nums []int, left, right int) (count int) {
 		k++
 		i++
 	}
-	for q <= right {
-		merged[k] = nums[q]
-		k++
-		q++
+	if q <= right {
+		copy(merged[k:], nums[q:])
 	}
 	copy(nums[left:right+1], merged)
 	return count
