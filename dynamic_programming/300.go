@@ -12,8 +12,9 @@ import (
 // 进阶: 你能将算法的时间复杂度降低到 O(n log n) 吗?
 // https://leetcode-cn.com/problems/longest-increasing-subsequence
 func main() {
-	fmt.Println(lengthOfLIS2([]int{10, 9, 2, 5, 3, 7, 101, 18})) // 4
-	fmt.Println(lengthOfLIS2([]int{1, 3, 6, 7, 9, 4, 10, 5, 6})) // 6
+	// fmt.Println(lengthOfLIS2([]int{10, 9, 2, 5, 3, 7, 101, 18})) // 4
+	// fmt.Println(lengthOfLIS2([]int{1, 3, 6, 7, 9, 4, 10, 5, 6})) // 6
+	fmt.Println(lengthOfLIS2([]int{10, 9, 2, 5, 3, 4})) // 3
 }
 
 // 法一：动态规划
@@ -39,7 +40,9 @@ func lengthOfLIS(nums []int) (result int) {
 	return result
 }
 
-// 法二：tail[i]代表长度为i+1的上升子序列中的末位最小值
+// 法二：dp+二分查找
+// tail[i]代表长度为i+1的上升子序列中的末位最小值
+// O(nlogn)
 func lengthOfLIS2(nums []int) (result int) {
 	n := len(nums)
 	if n <= 1 {
@@ -58,7 +61,7 @@ func lengthOfLIS2(nums []int) (result int) {
 			left, right := 0, key
 			for left < right {
 				mid := left + ((right - left) >> 1)
-				if nums[mid] >= nums[i] {
+				if tail[mid] >= nums[i] {
 					right = mid
 				} else {
 					left = mid + 1

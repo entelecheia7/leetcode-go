@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"regexp"
 )
 
 // 8. 字符串转换整数 (atoi)
@@ -19,12 +18,12 @@ import (
 //     假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−2^31,  2^31 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
 // https://leetcode-cn.com/problems/string-to-integer-atoi/
 func main() {
-	fmt.Println(myAtoi2(" "))
-	fmt.Println(myAtoi2("42"))
-	fmt.Println(myAtoi2("    -42"))
-	fmt.Println(myAtoi2("4193 with words"))
-	fmt.Println(myAtoi2("words 987"))
-	fmt.Println(myAtoi2("-91283472332")) // -2147483648
+	fmt.Println(myAtoi(" "))
+	fmt.Println(myAtoi("42"))
+	fmt.Println(myAtoi("    -42"))
+	fmt.Println(myAtoi("4193 with words"))
+	fmt.Println(myAtoi("words 987"))
+	fmt.Println(myAtoi("-91283472332")) // -2147483648
 
 }
 
@@ -44,6 +43,7 @@ func myAtoi(s string) (num int) {
 		}
 		s = s[1:]
 	}
+	// 禁止出现两个符号位或非数字字符
 	if s == "" || s[0] == '+' || s[0] == '-' || s[0] < '0' || s[0] > '9' {
 		return 0
 	}
@@ -51,16 +51,19 @@ func myAtoi(s string) (num int) {
 		if s[0] < '0' || s[0] > '9' {
 			break
 		}
-		num = num*10 + int(s[0]-'0')
-		if signed == 1 && num >= math.MaxInt32 {
-			return math.MaxInt32
-		} else if signed == -1 && -num <= math.MinInt32 {
-			return math.MinInt32
+		n := int(s[0] - '0')
+		if num > (math.MaxInt32-n)/10 {
+			if signed == 1 {
+				return math.MaxInt32
+			} else {
+				return math.MinInt32
+			}
 		}
+		num = num*10 + n
 		s = s[1:]
 	}
 
-	return num * symbol
+	return num * signed
 }
 
 // 法二：正则

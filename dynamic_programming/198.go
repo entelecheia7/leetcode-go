@@ -17,7 +17,9 @@ func main() {
 // 法一：动态规划。
 // nums[i] 要么纳入统计，要么不纳入统计。
 // dp[i]变成二维，dp[i][1]表示偷nums[i]的最大值，dp[i][0]表示不偷nums[i]的最大值
-// 这时dp变成二维
+// 这时dp变成二维：
+// dp[i][0] = max(dp[i-1][0], dp[i-1][1])
+// dp[i][1] = nums[i] + dp[i-1][0]
 // 可以通过改变dp[i]的定义将问题简化，将dp[i]定义为含nums[i]的最大值，则：
 // dp[2] = getMax(nums[1]+dp[0], dp[1])
 // dp[3] = getMax(nums[2]+dp[1], dp[2])

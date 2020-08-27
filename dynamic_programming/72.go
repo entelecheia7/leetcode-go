@@ -13,8 +13,7 @@ func main() {
 	fmt.Println(minDistance2("horse", "ros")) // 3
 }
 
-// 动态规划
-
+// 法一：动态规划
 // 莱文斯坦距离（Levenshtein distance）
 // dp[i][j]代表 word1 的[0:i]到 word2 的[0:j] 的编辑距离
 // dp[i][j]总是从 dp[i-1][j]、dp[i][j-1]、dp[i-1][j-1] 变化而来
@@ -70,7 +69,7 @@ func minDistance(word1 string, word2 string) int {
 	return dp[l1-1][l2-1]
 }
 
-// 对以上代码写法进行简化，添加哨兵。时间复杂度没有提升
+// 法二：对以上代码写法进行简化，添加哨兵。时间复杂度没有提升
 // dp[i][j]代表 word1 的[0:i)到 word2 的[0:j) 的编辑距离
 func minDistance2(word1 string, word2 string) int {
 	l1, l2 := len(word1), len(word2)
@@ -104,6 +103,8 @@ func minDistance2(word1 string, word2 string) int {
 
 	return dp[l1][l2]
 }
+
+// 法三：双端BFS todo
 
 func getMin(a, b int) int {
 	if a < b {

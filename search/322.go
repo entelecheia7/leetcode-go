@@ -13,15 +13,14 @@ import (
 //     假定所有机票至少存在一种合理的行程。
 // https://leetcode-cn.com/problems/reconstruct-itinerary/
 func main() {
-	// fmt.Println(findItinerary([][]string{{"MUC", "LHR"}, {"JFK", "MUC"}, {"SFO", "SJC"}, {"LHR", "SFO"}}))                                                                                                 // ["JFK", "MUC", "LHR", "SFO", "SJC"]
-	// fmt.Println(findItinerary([][]string{{"JFK", "ATL"}, {"ORD", "PHL"}, {"JFK", "ORD"}, {"PHX", "LAX"}, {"LAX", "JFK"}, {"PHL", "ATL"}, {"ATL", "PHX"}}))                                                 // ["JFK","ATL","PHX","LAX","JFK","ORD","PHL","ATL"]
-	// fmt.Println(findItinerary([][]string{{"EZE", "AXA"}, {"TIA", "ANU"}, {"ANU", "JFK"}, {"JFK", "ANU"}, {"ANU", "EZE"}, {"TIA", "ANU"}, {"AXA", "TIA"}, {"TIA", "JFK"}, {"ANU", "TIA"}, {"JFK", "TIA"}})) // ["JFK","ANU","EZE","AXA","TIA","ANU","JFK","TIA","ANU","TIA","JFK"]
-
+	fmt.Println(findItinerary([][]string{{"MUC", "LHR"}, {"JFK", "MUC"}, {"SFO", "SJC"}, {"LHR", "SFO"}}))                                                                                                 // ["JFK", "MUC", "LHR", "SFO", "SJC"]
+	fmt.Println(findItinerary([][]string{{"JFK", "ATL"}, {"ORD", "PHL"}, {"JFK", "ORD"}, {"PHX", "LAX"}, {"LAX", "JFK"}, {"PHL", "ATL"}, {"ATL", "PHX"}}))                                                 // ["JFK","ATL","PHX","LAX","JFK","ORD","PHL","ATL"]
+	fmt.Println(findItinerary([][]string{{"EZE", "AXA"}, {"TIA", "ANU"}, {"ANU", "JFK"}, {"JFK", "ANU"}, {"ANU", "EZE"}, {"TIA", "ANU"}, {"AXA", "TIA"}, {"TIA", "JFK"}, {"ANU", "TIA"}, {"JFK", "TIA"}})) // ["JFK","ANU","EZE","AXA","TIA","ANU","JFK","TIA","ANU","TIA","JFK"]
 	fmt.Println(findItinerary([][]string{{"JFK", "KUL"}, {"JFK", "NRT"}, {"NRT", "JFK"}}))
 }
 
 // 法一：DFS
-// 由于必然存在一条有效路径，所以算法不需要回溯（既加入到结果集里的元素不需要删除）
+// 由于必然存在一条有效路径，所以算法不需要回溯（加入到结果集里的元素不需要删除）
 func findItinerary(tickets [][]string) (path []string) {
 	n := len(tickets)
 	// 构建有向图
@@ -37,21 +36,21 @@ func findItinerary(tickets [][]string) (path []string) {
 		}
 		sort.Strings(graph[k])
 	}
-	path = make([]string, n+1)
-	findItineraryDFSHelper(graph, "JFK", path, 0, n)
-	return path
-}
-
-func findItineraryDFSHelper(graph map[string][]string, cur string, path []string, i int, n int) {
-	fmt.Println(i, cur, graph[cur])
-	for {
-		if len(graph[cur]) == 0 {
-			// 可能是走到了死路，也有可能是到达了终点
-			break
+	var dfsHelper func(cur string)
+	dfsHelper = func(cur string) {
+		for len(graph[cur]) > 0 {
+			next := graph[cur][0]
+			graph[cur] = graph[cur][1:]
+			dfsHelper(next)
 		}
-		next := graph[cur][0]
-		graph[cur] = graph[cur][1:]
-		findItineraryDFSHelper(graph, next, path, i+1, n)
+		// 这里无法通过递增k来组织path，因为同一层级的元素k是相同的，会被覆盖
+		path = append(path, cur)
 	}
-	path[i] = cur
+
+	dfsHelper("JFK")
+	// 反转path
+	for i := 0; i < len(path)/2; i++ {
+		path[i], path[n-i] = path[n-i], path[i]
+	}
+	return path
 }
