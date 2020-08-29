@@ -13,12 +13,12 @@ import "fmt"
 // https://leetcode-cn.com/problems/regular-expression-matching/
 func main() {
 	// true
-	fmt.Println(isMatch("aa", "aa"))
-	fmt.Println(isMatch("aa", "a."))
-	fmt.Println(isMatch("aa", "a*"))
-	fmt.Println(isMatch("aa", "aa*"))
-	fmt.Println(isMatch("", ".*.*.*"))
-	fmt.Println(isMatch("a", "ab*"))
+	fmt.Println(isMatch2("aa", "aa"))
+	fmt.Println(isMatch2("aa", "a."))
+	fmt.Println(isMatch2("aa", "a*"))
+	fmt.Println(isMatch2("aa", "aa*"))
+	fmt.Println(isMatch2("", ".*.*.*"))
+	fmt.Println(isMatch2("a", "ab*"))
 }
 
 // 法一：分治+递归
@@ -26,60 +26,57 @@ func main() {
 // '.' 可单独为一个单元
 // '*'可组合为 .* 、字母*
 // 其余字母正常处理
-// best
 func isMatch(s string, p string) bool {
 	if s == "" && p == "" { // 匹配结束
 		return true
-	} else if p == "" && s != "" {
+	} else if (p == "" && s != "") || p[0] == '*' { // * 是模式串首字母，不合法
 		// 模式串为空，字符串不为空，一定是无法匹配的
 		// 字符串为空，但模式串不为空，是可能匹配成功的，比如 字符+*
 		return false
-	} else if p[0] == '*' { // * 是模式串首字母，不合法
-		return false
 	}
-	lp, ls := len(p), len(s)
-	i := lp - 1  // 模式串下标
-	sk := ls - 1 // 字符串下标
-	for i >= 0 {
+	m, n := len(p), len(s)
+	i := m - 1   // 模式串下标
+	j := n - 1   // 字符串下标
+	for i >= 0 { // 以模式串为基准倒序匹配
 		if p[i] == '*' {
 			pre := i - 1
-			if p[pre] == '*' { // 出现 ** ，说明是一个不合法的模式串
+			if pre < 0 || p[pre] == '*' { // 不合法的模式串
 				return false
 			}
 			// * 的组合可以匹配字符串s中的0个字符或多个字符，逐一尝试
 			var result bool
 			if p[i-1] == '.' { //.*
-				for sk >= -1 { // 支持 s[:0]，即字符串为空的情况
-					result = isMatch(s[:sk+1], p[:pre])
+				for j >= -1 { // 支持 s[:0]，即字符串为空的情况
+					result = isMatch(s[:j+1], p[:pre])
 					if result {
 						return true
 					}
-					sk--
+					j--
 				}
 			} else { // [a-z] + *
-				for sk >= 0 && s[sk] == p[pre] {
-					result = isMatch(s[:sk+1], p[:pre])
+				for j >= 0 && s[j] == p[pre] {
+					result = isMatch(s[:j+1], p[:pre])
 					if result {
 						return true
 					}
-					sk--
+					j--
 				}
 				i--
 			}
 		} else if p[i] == '.' {
-			if sk < 0 {
+			if j < 0 {
 				return false
 			}
-			sk--
+			j--
 		} else { // a-z
-			if sk < 0 || s[sk] != p[i] {
+			if j < 0 || s[j] != p[i] {
 				return false
 			}
-			sk--
+			j--
 		}
 		i--
 	}
-	if sk >= 0 {
+	if j >= 0 {
 		return false
 	}
 
@@ -87,50 +84,49 @@ func isMatch(s string, p string) bool {
 }
 
 // 法二：动态规划
+// dp[i][j]表示s的前i个字符和p的前j个字符是否匹配
 func isMatch2(s string, p string) bool {
-	if s == "" && p == "" {
+	if s == "" && p == "" { // 匹配结束
 		return true
-	} else if p == "" && s != "" {
+	} else if (p == "" && s != "") || p[0] == '*' { // * 是模式串首字母，不合法
 		// 模式串为空，字符串不为空，一定是无法匹配的
 		// 字符串为空，但模式串不为空，是可能匹配成功的，比如 字符+*
 		return false
-	} else if p[0] == '*' { // * 是模式串首字母，不合法
-		return false
 	}
-	lp, ls := len(p), len(s)
+	m, n := len(s), len(p)
 	// dp[i][j] 表示 s[0,i) 是否能匹配 p[0,j)
-	dp := make([][]bool, ls+1)
-	for i := 0; i <= ls; i++ {
-		dp[i] = make([]bool, lp+1)
+	dp := make([][]bool, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]bool, n+1)
 	}
 	dp[0][0] = true
-	// s[sk-1,sk) 和 p[pk-1:pk) 单个字符匹配函数，不考虑*
-	match := func(sk, pk int) bool {
-		if sk == 0 && pk == 0 {
+	// s第i个字符 和 p第j个字符 单个字符匹配函数，不考虑*
+	match := func(i, j int) bool {
+		if i == 0 && j == 0 {
 			return true
 		}
-		if sk == 0 || pk == 0 {
+		if i == 0 || j == 0 {
 			return false
 		}
-		if p[pk-1] == '.' {
+		if p[j-1] == '.' {
 			return true
 		}
-		return s[sk-1] == p[pk-1]
+		return s[i-1] == p[j-1]
 	}
 
-	for sk := 0; sk <= ls; sk++ {
-		for pk := 1; pk <= lp; pk++ {
-			if p[pk-1] == '*' { // 字符+*
-				dp[sk][pk] = dp[sk][pk-2] || dp[sk][pk] // 匹配0个
+	for i := 0; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if p[j-1] == '*' { // 字符+*
+				dp[i][j] = dp[i][j-2] // 匹配0个
 				// 匹配一个
-				if match(sk, pk-1) {
-					dp[sk][pk] = dp[sk][pk] || dp[sk-1][pk]
+				if match(i, j-1) {
+					dp[i][j] = dp[i][j] || dp[i-1][j]
 				}
-			} else if match(sk, pk) { // . 或 字母
-				dp[sk][pk] = dp[sk][pk] || dp[sk-1][pk-1]
+			} else if match(i, j) { // . 或 字母
+				dp[i][j] = dp[i-1][j-1]
 			}
 		}
 	}
 
-	return dp[ls][lp]
+	return dp[m][n]
 }

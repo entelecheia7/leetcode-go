@@ -10,6 +10,7 @@ func main() {
 }
 
 // 法一：暴力+双指针
+// 枚举回文串中心，双指针向两侧扩展
 // best
 func longestPalindrome(s string) (result string) {
 	n := len(s)
@@ -43,7 +44,6 @@ func longestPalindrome(s string) (result string) {
 // 法二：动态规划
 // dp[i][j]表示s[i:j]是否为回文字符串，含两侧边界
 // O(n^2)
-// 该解法还可以进行优化，dp[i][j]仅和sp[i+1][j-1]相关
 func longestPalindrome2(s string) (result string) {
 	n := len(s)
 	if n <= 1 {
@@ -55,17 +55,11 @@ func longestPalindrome2(s string) (result string) {
 		dp[k] = make([]bool, n)
 		dp[k][k] = true
 	}
-	for j := 1; j < n; j++ {
-		for i := 0; i < j; i++ {
-			if s[i] == s[j] {
-				if j == i+1 {
-					dp[i][j] = true
-				} else if dp[i+1][j-1] {
-					dp[i][j] = true
-				}
-				if dp[i][j] && j-i+1 > len(result) {
-					result = s[i : j+1]
-				}
+	for i := n - 1; i >= 0; i-- {
+		for j := i; j < n; j++ {
+			dp[i][j] = s[i] == s[j] && ((j-i < 2) || dp[i+1][j-1])
+			if dp[i][j] && j-i+1 > len(result) {
+				result = s[i : j+1]
 			}
 		}
 	}

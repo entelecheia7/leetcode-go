@@ -29,29 +29,28 @@ func main() {
 
 // 法一：暴力
 func myAtoi(s string) (num int) {
+	length := len(s)
 	// 去掉左侧空格
-	for s != "" && s[0] == ' ' {
-		s = s[1:]
-	}
-	if s == "" {
-		return 0
+	k := 0
+	for k < length && s[k] == ' ' {
+		k++
 	}
 	signed := 1 // 记录符号，去掉符号位
-	if s[0] == '+' || s[0] == '-' {
-		if s[0] == '-' {
+	if k < length && (s[k] == '+' || s[k] == '-') {
+		if s[k] == '-' {
 			signed = -1
 		}
-		s = s[1:]
+		k++
 	}
 	// 禁止出现两个符号位或非数字字符
-	if s == "" || s[0] == '+' || s[0] == '-' || s[0] < '0' || s[0] > '9' {
+	if k < length && (s[k] == '+' || s[k] == '-' || s[k] < '0' || s[k] > '9') {
 		return 0
 	}
-	for s != "" {
-		if s[0] < '0' || s[0] > '9' {
+	for k < length {
+		if s[k] < '0' || s[k] > '9' {
 			break
 		}
-		n := int(s[0] - '0')
+		n := int(s[k] - '0')
 		if num > (math.MaxInt32-n)/10 {
 			if signed == 1 {
 				return math.MaxInt32
@@ -60,7 +59,7 @@ func myAtoi(s string) (num int) {
 			}
 		}
 		num = num*10 + n
-		s = s[1:]
+		k++
 	}
 
 	return num * signed

@@ -23,6 +23,7 @@ func main() {
 // 求解 dp[i][j]，需要在 dp[i-1][j-1]、dp[i-1][j]、dp[i][j-1]的基础上判断 text1[i]和 text2[j]的关系
 // 如果 text1[i-1] == text2[j-1]，则dp[i][j] = dp[i-1][j-1]+1
 // 如果 text1[i-1] != text2[j-1]，则dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+// 不等的情况下，不考虑dp[i-1][j-1]，这样会漏掉答案，比如abcx和abxc
 func longestCommonSubsequence(text1 string, text2 string) int {
 	if text1 == "" || text2 == "" {
 		return 0
