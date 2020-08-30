@@ -31,6 +31,7 @@ func numDistinct(s string, t string) int {
 			if s[j-1] == t[i-1] {
 				dp[i][j] = dp[i-1][j-1] + dp[i][j-1]
 			} else {
+				// s中的字符是可以删除的，因此dp[i][j]由dp[i][j-1]推出
 				dp[i][j] = dp[i][j-1]
 			}
 		}
