@@ -19,7 +19,7 @@ func main() {
 	fmt.Println(topKFrequent2([]int{1, 2}, 2))
 }
 
-// 法一：利用桶排序。先使用map统计频率，再按照频率分为1-m个桶
+// 法一：利用桶排序。先使用map统计频率，再按照频率分为1-m个桶，最后将桶由高到低输出
 // 这种方法适合频率分布范围不大且比较平均的情况
 func topKFrequent(nums []int, k int) (result []int) {
 	frequency := make(map[int]int, k) // 数字=>频率
@@ -27,7 +27,7 @@ func topKFrequent(nums []int, k int) (result []int) {
 		frequency[num]++
 	}
 	freq := make(map[int][]int) // 频率=>数字集合
-	maxBucket := 0
+	maxBucket := 0              // 记录一个最高的频率
 	for num, f := range frequency {
 		freq[f] = append(freq[f], num)
 		if f > maxBucket {

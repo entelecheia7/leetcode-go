@@ -31,19 +31,20 @@ func combinationSum(candidates []int, target int) (result [][]int) {
 	combinationSumHelper(candidates, []int{}, 0, target, &result)
 	return result
 }
-func combinationSumHelper(candidates []int, cur []int, candidateIndex int, target int, result *[][]int) {
+func combinationSumHelper(candidates []int, cur []int, availStart int, target int, result *[][]int) {
 	if target == 0 {
 		tmp := make([]int, len(cur))
 		copy(tmp, cur)
 		*result = append(*result, tmp)
 		return
 	}
-	for i := candidateIndex; i < len(candidates); i++ {
+	n := len(cur)
+	for i := availStart; i < len(candidates); i++ {
 		if candidates[i] > target {
 			return
 		}
 		cur = append(cur, candidates[i])
 		combinationSumHelper(candidates, cur, i, target-candidates[i], result)
-		cur = cur[:len(cur)-1]
+		cur = cur[:n]
 	}
 }

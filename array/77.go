@@ -19,64 +19,33 @@ import (
 // ]
 // https://leetcode-cn.com/problems/combinations
 func main() {
-	fmt.Println(combine(4, 2)) // best
-	fmt.Println(combine2(4, 2))
+	fmt.Println(combine(4, 2))
 }
+
+// 回溯
 func combine(n int, k int) (result [][]int) {
 	if n < 1 || k < 1 || n < k {
 		return nil
 	}
-	cur := make([]int, k, k)
-	helper1(cur, 0, 1, n, k, &result)
+	cur := make([]int, k)
+	helper(cur, 0, 1, n, k, &result)
 
 	return result
 }
 
-// 有两种写法
-// 法一：双百
-// ci 是在本次函数中，cur中要添加的元素的位置，避免append操作
-func helper1(cur []int, ci, start, n, k int, result *[][]int) {
-	if k == 0 {
+// i 是在本次函数中，cur中要添加的元素的位置，避免append操作
+func helper(cur []int, i, left, right, k int, result *[][]int) {
+	if i == k {
 		tmp := make([]int, len(cur))
 		copy(tmp, cur)
 		*result = append(*result, tmp)
 		return
 	}
-
-	for i := start; i <= n-k+1; i++ {
-		cur[ci] = i
-		helper1(cur, ci+1, i+1, n, k-1, result)
-	}
-
-}
-
-// 法二
-func combine2(n int, k int) [][]int {
-	if n < 1 || k < 1 || n < k {
-		return nil
-	}
-	cur := make([]int, 0, k)
-	result := [][]int{}
-	helper2(cur, 1, n, k, &result)
-
-	return result
-}
-
-func helper2(cur []int, num, n, k int, result *[][]int) {
-	if k == 0 {
-		tmp := make([]int, len(cur))
-		copy(tmp, cur)
-		*result = append(*result, tmp)
+	if left > right || right-left+1 < k-i {
 		return
 	}
-	if num > n {
-		return
-	}
-	cur = append(cur, num)
-	//
-	helper2(cur, num+1, n, k-1, result)
-	//
-	cur = cur[:len(cur)-1]
-
-	helper2(cur, num+1, n, k, result)
+	// 选择当前的数字或不选
+	cur[i] = left
+	helper(cur, i+1, left+1, right, k, result)
+	helper(cur, i, left+1, right, k, result)
 }
